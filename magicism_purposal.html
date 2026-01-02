@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>品牌視覺夥伴計畫｜預約制服務 - 余莉苹</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; scroll-behavior: smooth; }
+        .font-poppins { font-family: 'Poppins', sans-serif; }
+        .gradient-text {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .plan-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .plan-card:hover { transform: translateY(-12px); }
+        .sticky-nav { backdrop-filter: blur(12px); background-color: rgba(255, 255, 255, 0.9); }
+        
+        .price-badge {
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-block;
+        }
+        .save-badge {
+            border: 1px solid transparent;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .page-content { display: none; }
+        .page-content.active { display: block; }
+        .funnel-step {
+            clip-path: polygon(0% 0%, 100% 0%, 92% 100%, 8% 100%);
+        }
+        .sla-table th { background: rgba(15, 23, 42, 0.05); text-align: left; padding: 18px; border-bottom: 2px solid rgba(15, 23, 42, 0.1); }
+        .sla-table td { padding: 18px; border-bottom: 1px solid rgba(15, 23, 42, 0.05); }
+        
+        .tiered-pause { font-size: 0.8rem; padding: 2px 12px; border-radius: 99px; font-weight: 700; }
+        
+        .detail-header { border-bottom: 1px solid #f1f5f9; }
+        .feature-icon-box { width: 56px; height: 56px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; }
+        
+        .back-btn { transition: all 0.3s ease; border: 1px solid #e2e8f0; cursor: pointer; }
+        .back-btn:hover { background: #f8fafc; transform: translateX(-5px); }
+
+        .lock-badge { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+
+        .color-essential { color: #2563eb; }
+        .bg-essential { background-color: #eff6ff; }
+        .border-essential { border-color: #dbeafe; }
+        
+        .color-premium { color: #7c3aed; }
+        .bg-premium { background-color: #f5f3ff; }
+        .border-premium { border-color: #ede9fe; }
+
+        .color-plus { color: #d97706; }
+        .bg-plus { background-color: #fffbeb; }
+        .border-plus { border-color: #fef3c7; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- 導覽列 -->
+    <nav class="sticky-nav sticky top-0 z-50 border-b border-slate-200">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-xl font-bold text-slate-900 flex items-center gap-3 cursor-pointer" onclick="showPage('home')">
+                <img src="https://raw.githubusercontent.com/lupinart/webimage/main/logo_lu_blue.svg" alt="余莉苹 Logo" class="w-10 h-10 object-contain rounded-lg">
+                <span class="tracking-tight">品牌視覺夥伴計畫｜預約制服務</span>
+            </div>
+            <div class="hidden md:flex gap-8 font-medium text-slate-500 text-sm">
+                <a href="javascript:void(0)" onclick="showPage('home', 'why')" class="hover:text-blue-600 transition">轉型原因</a>
+                <a href="javascript:void(0)" onclick="showPage('home', 'logic')" class="hover:text-blue-600 transition">運作邏輯</a>
+                <a href="javascript:void(0)" onclick="showPage('home', 'funnel')" class="hover:text-blue-600 transition">價值漏斗</a>
+                <a href="javascript:void(0)" onclick="showPage('home', 'pricing')" class="hover:text-blue-600 transition font-bold text-blue-600 border-b-2 border-blue-600 pb-1">方案選擇</a>
+            </div>
+            <a href="#contact" class="bg-blue-600 text-white px-6 py-2 rounded-full font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-500/30 text-sm">立即諮詢</a>
+        </div>
+    </nav>
+
+    <!-- 首頁 -->
+    <main id="page-home" class="page-content active">
+        <!-- Hero Section -->
+        <section class="pt-24 pb-20 px-6 text-center bg-white">
+            <div class="max-w-6xl mx-auto">
+                <div class="inline-flex items-center gap-2 px-4 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-bold mb-8 tracking-widest uppercase">
+                    <i class="fa-solid fa-star text-amber-500"></i> 魔法科學 專屬合作提案
+                </div>
+                <h1 class="text-5xl md:text-7xl font-bold mb-8 leading-tight text-slate-900">
+                    從單次計件，升級為<br>
+                    <span class="gradient-text">企業級視覺執行系統</span>
+                </h1>
+                <p class="text-xl text-slate-500 max-w-3xl mx-auto mb-12 leading-relaxed">
+                   不只是買一張圖，而是預約一份「專屬頻寬」。我將協助魔法科學建立標準化視覺資產，將每一分支出轉化為長期的品牌價值，更為您建立「連猴子也懂」的防呆 SOP。讓魔法科學的品牌標準不隨人員流動而走鐘，徹底解放您的管理帶寬。
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 1: Why Switch -->
+        <section id="why" class="py-24 bg-slate-50 border-y border-slate-200">
+            <div class="max-w-6xl mx-auto px-6 text-center">
+                <h2 class="text-4xl font-bold mb-4 text-slate-900 font-poppins tracking-tight uppercase">為什麼要轉向訂閱制？</h2>
+                <p class="text-slate-500 mb-16 text-lg font-medium">消除溝通、行政與創意的多重損耗</p>
+                <div class="grid md:grid-cols-4 gap-12">
+                    <div class="group">
+                        <div class="text-blue-600 text-4xl mb-6 group-hover:scale-110 transition-transform"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                        <h4 class="text-lg font-bold mb-4 text-slate-800">行政流程全自動</h4>
+                        <p class="text-slate-500 text-sm leading-relaxed">免除繁瑣報價與核銷。一季一次結算，將時間歸還給市場決策。</p>
+                    </div>
+                    <div class="group">
+                        <div class="text-blue-600 text-4xl mb-6 group-hover:scale-110 transition-transform"><i class="fa-solid fa-bolt"></i></div>
+                        <h4 class="text-lg font-bold mb-4 text-slate-800">無感的急件處理</h4>
+                        <p class="text-slate-500 text-sm leading-relaxed">取消 30%-50% 的急件費。透過插槽優先序，讓行銷預算 100% 可預測。</p>
+                    </div>
+                    <div class="group">
+                        <div class="text-blue-600 text-4xl mb-6 group-hover:scale-110 transition-transform"><i class="fa-solid fa-calendar-minus"></i></div>
+                        <h4 class="text-lg font-bold mb-4 text-slate-800">預算彈性保留權</h4>
+                        <p class="text-slate-500 text-sm leading-relaxed">支援「月單位暫停」。項目提早完成可鎖定剩餘額度，確保預算不虛耗。</p>
+                    </div>
+                    <div class="group">
+                        <div class="text-blue-600 text-4xl mb-6 group-hover:scale-110 transition-transform"><i class="fa-solid fa-gem"></i></div>
+                        <h4 class="text-lg font-bold mb-4 text-slate-800">品牌資產複利</h4>
+                        <p class="text-slate-500 text-sm leading-relaxed">不再只是單張繪製。透過「系統化模板」開發，讓設計資源能無限次復用。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Slot Logic & SLA -->
+        <section id="logic" class="py-24 bg-slate-900 text-white">
+            <div class="max-w-6xl mx-auto px-6 text-left">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 font-poppins uppercase">運作邏輯與服務標準</h2>
+                    <p class="text-slate-400 text-sm">從「純粹執行」到「策略代管」，定義協作深度</p>
+                </div>
+                
+                <div class="grid lg:grid-cols-2 gap-10">
+                    <div class="bg-white/5 p-10 rounded-[2.5rem] border border-white/10">
+                        <h3 class="text-2xl font-bold mb-8 flex items-center gap-3 text-blue-400">
+                            <i class="fa-solid fa-layer-group"></i> 插槽與權限規則
+                        </h3>
+                        <ul class="space-y-6 text-slate-300 text-sm leading-relaxed">
+                            <li class="flex gap-4">
+                                <span class="text-blue-400 font-bold">01</span>
+                                <div><strong>自動補位系統：</strong> 任務驗收後，下一項自動遞補，產能永不中斷。</div>
+                            </li>
+                            <li class="flex gap-4">
+                                <span class="text-blue-400 font-bold">02</span>
+                                <div><strong>資料齊備開工：</strong> 插槽在「資料齊全」後啟動，避免因溝通缺失導致的產能浪費。</div>
+                            </li>
+                            <li class="flex gap-4">
+                                <span class="text-blue-400 font-bold">03</span>
+                                <div><strong>主動權區隔：</strong> 進階型以上提供策略諮詢；基礎型為「純執行排版機器」。</div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bg-blue-600 p-10 rounded-[2.5rem] shadow-2xl shadow-blue-900/40">
+                        <h3 class="text-2xl font-bold mb-8 flex items-center gap-3 text-white">
+                            <i class="fa-solid fa-message"></i> 回應標準 (SLA)
+                        </h3>
+                        <ul class="space-y-6 text-blue-50 text-sm">
+                            <li class="flex justify-between border-b border-blue-500/50 pb-3">
+                                <span class="opacity-80">訊息即時回應</span>
+                                <span class="font-bold">平日 4 - 8 小時內</span>
+                            </li>
+                            <li class="flex justify-between border-b border-blue-500/50 pb-3">
+                                <span class="opacity-80">首波進度回報</span>
+                                <span class="font-bold">啟動後 48h 內</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span class="opacity-80">緊急插隊權利</span>
+                                <span class="font-bold underline underline-offset-4">24h 內快速反應權</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Value Funnel -->
+        <section id="funnel" class="py-24 bg-white border-b border-slate-100">
+            <div class="max-w-6xl mx-auto px-6 text-center">
+                <h2 class="text-4xl font-bold mb-4 text-slate-900 font-poppins tracking-tight uppercase">視覺價值漏斗</h2>
+                <p class="text-slate-500 mb-16 text-lg font-medium">為經營者買回決策的時間</p>
+
+                <div class="max-w-3xl mx-auto flex flex-col gap-6 text-left">
+                    <div class="funnel-step bg-slate-100 p-10 text-center border-t-4 border-blue-600 shadow-sm text-slate-800">
+                        <h4 class="font-bold text-xl mb-2 font-poppins uppercase tracking-tighter">Essential: Production Line</h4>
+                        <p class="text-slate-500 text-sm italic">基礎守護。純粹執行既有規範，成本與穩定度最優化。</p>
+                    </div>
+                    <div class="funnel-step bg-purple-50 p-12 text-center border-t-4 border-purple-400 scale-[0.9] -mt-2 shadow-sm text-purple-900">
+                        <h4 class="font-bold text-xl mb-2 font-poppins uppercase tracking-tighter">Premium: Asset System</h4>
+                        <p class="text-purple-600 text-sm italic">系統開發。構建數位廣告模板與視覺規範，打造視覺彈藥庫。</p>
+                    </div>
+                    <div class="funnel-step bg-slate-900 p-14 text-center border-t-4 border-amber-500 scale-[0.85] shadow-2xl text-white -mt-4">
+                        <h4 class="font-bold text-xl mb-2 font-poppins uppercase text-amber-500 tracking-tighter">Premium+: Strategic Agency</h4>
+                        <p class="text-slate-300 text-sm italic">戰略代理。解決實體監修、廠商對接，買回老闆每月 20+ hr。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Pricing & Economic Analysis -->
+        <section id="pricing" class="py-24 bg-slate-50">
+            <div class="max-w-full mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 text-slate-900">服務預約方案</h2>
+                    <div class="inline-block p-4 lock-badge rounded-2xl text-sm shadow-sm">
+                        <i class="fa-solid fa-lock mr-2 text-amber-600"></i>
+                        現有客戶享有「永久價格保護權」。未來方案調漲時，早期支持者不受影響。
+                    </div>
+                </div>
+                
+                <!-- 報價卡片 Grid -->
+                <div class="grid lg:grid-cols-4 gap-6 text-left items-stretch mb-24">
+                    <!-- Fragmented Mode -->
+                    <div class="plan-card p-8 rounded-[2rem] border border-slate-200 bg-slate-200/40 flex flex-col shadow-sm grayscale hover:grayscale-0">
+                        <div class="mb-6 text-slate-400 font-bold uppercase tracking-widest text-[10px] font-poppins text-center">Traditional</div>
+                        <h3 class="text-xl font-bold mb-6 text-slate-500 text-center">碎片化計件</h3>
+                        <div class="space-y-4 mb-8 text-center">
+                            <div class="text-[10px] text-slate-400 uppercase font-bold text-center">Standard Quoting</div>
+                            <div class="text-2xl font-bold font-poppins text-slate-600">依件報價</div>
+                            <div class="text-[10px] text-red-500 font-bold leading-tight mt-2 italic text-center">※ 行政流程長・需對帳<br>※ 無優先權・常態急件費</div>
+                        </div>
+                        <ul class="space-y-3 mb-10 flex-grow text-[11px] text-slate-500 leading-tight">
+                            <li class="flex gap-2"><i class="fa-solid fa-circle-exclamation text-slate-300"></i> 無優先插槽，隨機接單</li>
+                            <li class="flex gap-2"><i class="fa-solid fa-circle-exclamation text-slate-300"></i> 缺乏視覺一致性維護</li>
+                            <li class="flex gap-2"><i class="fa-solid fa-circle-exclamation text-slate-300"></i> 每次需重啟報價流程</li>
+                        </ul>
+                    </div>
+
+                    <!-- Essential -->
+                    <div class="plan-card p-8 rounded-[2rem] border-2 border-blue-100 bg-white flex flex-col shadow-sm text-left">
+                        <div class="mb-6 text-blue-600 font-bold uppercase tracking-widest text-[10px] font-poppins text-center">Baseline</div>
+                        <h3 class="text-xl font-bold mb-6 text-slate-900 text-center">Essential</h3>
+                        <div class="space-y-4 mb-10">
+                            <div class="flex items-center justify-between">
+                                <span class="price-badge bg-blue-50 text-blue-700 border border-blue-100">轉型限定 75 折</span>
+                                <div class="text-right">
+                                    <span class="line-through text-slate-300 text-[10px] block">$20,000</span>
+                                    <span class="text-xl font-bold font-poppins text-blue-600">$15,000</span>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-blue-50/50 rounded-2xl border border-blue-100 shadow-inner">
+                                <span class="save-badge bg-white text-blue-700 border-blue-100 mb-1 inline-block text-[10px]">季度預約</span>
+                                <div class="flex justify-between items-end">
+                                    <div class="text-2xl font-bold font-poppins text-slate-900">$35,000</div>
+                                    <div class="text-[10px] text-blue-600 font-bold">省 $10,000</div>
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="space-y-3 mb-10 flex-grow text-[12px] text-slate-600 leading-tight">
+                            <li class="flex gap-2"><i class="fa-solid fa-check text-blue-500"></i> 穩定日常排版更新</li>
+                            <li class="flex gap-2 text-slate-400 italic font-medium"><i class="fa-solid fa-ban opacity-30"></i> 排除主動策略諮詢</li>
+                            <li class="font-bold text-blue-600 pt-2"><i class="fa-solid fa-calendar-check mr-2"></i> 每季限暫停 1 次</li>
+                        </ul>
+                        <button onclick="showPage('essential')" class="block w-full text-center py-3 rounded-xl border-2 border-blue-600 text-blue-600 font-bold hover:bg-blue-600 hover:text-white transition text-xs uppercase">方案詳情</button>
+                    </div>
+
+                    <!-- Premium -->
+                    <div class="plan-card p-8 rounded-[2rem] border-2 border-purple-100 bg-white flex flex-col shadow-sm relative overflow-hidden text-left">
+                        <div class="mb-6 text-purple-600 font-bold uppercase tracking-widest text-[10px] font-poppins text-center">Efficiency</div>
+                        <h3 class="text-xl font-bold mb-6 text-slate-900 text-center uppercase">Premium</h3>
+                        <div class="space-y-4 mb-10">
+                            <div class="flex items-center justify-between">
+                                <span class="price-badge bg-purple-50 text-purple-700 border border-purple-100">轉型限定 7 折</span>
+                                <div class="text-right">
+                                    <span class="line-through text-slate-300 text-[10px] block">$35,000</span>
+                                    <span class="text-xl font-bold font-poppins text-purple-600">$25,000</span>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-purple-50/50 rounded-2xl border border-purple-100 shadow-inner">
+                                <span class="save-badge bg-white text-purple-700 border-purple-100 mb-1 inline-block text-[10px]">系統化首選</span>
+                                <div class="flex justify-between items-end">
+                                    <div class="text-2xl font-bold font-poppins text-purple-900">$60,000</div>
+                                    <div class="text-[10px] text-purple-600 font-bold">省 $15,000</div>
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="space-y-3 mb-10 flex-grow text-[12px] text-slate-600 font-medium leading-tight">
+                            <li class="flex gap-2"><i class="fa-solid fa-bolt text-purple-500"></i> 設計+修改雙軌系統</li>
+                            <li class="flex gap-2"><i class="fa-solid fa-object-group text-purple-500"></i> 行銷視覺資產模板化</li>
+                            <li class="flex gap-2"><i class="fa-solid fa-vial-circle-check text-purple-500"></i> A/B Test 素材支援</li>
+                            <li class="font-bold text-purple-600 pt-2"><i class="fa-solid fa-calendar-check mr-2"></i> 每季限暫停 2 次</li>
+                        </ul>
+                        <button onclick="showPage('premium')" class="block w-full text-center py-3 rounded-xl bg-purple-600 text-white font-bold hover:bg-purple-700 transition shadow-lg shadow-purple-200 text-xs uppercase">方案詳情</button>
+                    </div>
+
+                    <!-- Premium+ -->
+                    <div class="plan-card p-8 rounded-[2rem] border-2 border-slate-800 bg-slate-900 flex flex-col shadow-2xl relative text-white text-left">
+                        <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-amber-500 text-slate-900 px-4 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest shadow-lg font-poppins">Early Bird Protection</div>
+                        <div class="mb-6 text-amber-500 font-bold uppercase tracking-widest text-[10px] font-poppins text-center text-amber-400">Art Director</div>
+                        <h3 class="text-xl font-bold mb-6 text-white text-center uppercase">Premium+</h3>
+                        <div class="space-y-4 mb-10">
+                            <div class="flex items-center justify-between">
+                                <span class="price-badge bg-white/10 text-amber-400 border border-amber-400/30">限額 7 折優惠</span>
+                                <div class="text-right">
+                                    <span class="line-through text-slate-500 text-[10px] block">$50,000</span>
+                                    <span class="text-xl font-bold font-poppins text-white">$35,000</span>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-white/5 rounded-2xl border border-white/10">
+                                <span class="save-badge bg-amber-500 text-slate-900 border-none mb-1 inline-block text-[10px] font-black uppercase">Save $30,000</span>
+                                <div class="flex justify-between items-end">
+                                    <div class="text-2xl font-bold font-poppins text-white">$85,000</div>
+                                    <div class="text-[10px] text-amber-500 font-bold uppercase">Quarterly</div>
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="space-y-3 mb-10 flex-grow text-[11px] text-slate-300 font-bold leading-tight">
+                            <li class="flex gap-2 text-amber-400"><i class="fa-solid fa-crown"></i> 虛擬視覺總監代管權</li>
+                            <li class="flex gap-2"><i class="fa-solid fa-sparkles"></i> 唯一主動資產優化權</li>
+                            <li class="flex gap-2"><i class="fa-solid fa-shield-signature"></i> 實體品質與風險代管</li>
+                            <li class="text-amber-400 pt-2"><i class="fa-solid fa-infinity mr-2"></i> 無限次彈性暫停權</li>
+                        </ul>
+                        <button onclick="showPage('premium-plus')" class="block w-full text-center py-3 rounded-xl bg-amber-500 text-slate-900 font-bold hover:bg-amber-400 transition shadow-lg shadow-amber-500/20 text-xs uppercase">方案詳情</button>
+                    </div>
+                </div>
+
+                <!-- 經濟效益分析 (Moved to below Pricing) -->
+                <div class="mt-20 p-10 bg-white rounded-[2.5rem] border border-slate-200 shadow-sm max-w-4xl mx-auto text-left">
+                    <h3 class="text-2xl font-bold mb-8 text-center text-slate-900 font-poppins uppercase tracking-tight">經濟效益分析 (與聘請專職人員對比)</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left">
+                            <thead>
+                                <tr class="border-b-2 border-slate-200">
+                                    <th class="py-4 font-bold text-slate-500">比較項目</th>
+                                    <th class="py-4 font-bold text-slate-500">聘請專職人員</th>
+                                    <th class="py-4 font-bold text-blue-600">夥伴計畫 (Premium+)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-slate-600">
+                                <tr class="border-b border-slate-100">
+                                    <td class="py-5 font-medium">每月真實總支出</td>
+                                    <td class="py-5">約 $45,000+ <span class="text-[10px] block opacity-60">(含勞健保、硬體、獎金)</span></td>
+                                    <td class="py-5 font-bold text-slate-900">$35,000 <span class="text-[10px] block text-blue-600 font-bold">(All-in 協作價)</span></td>
+                                </tr>
+                                <tr class="border-b border-slate-100">
+                                    <td class="py-5 font-medium">核心職能</td>
+                                    <td class="py-5">單一執行人員</td>
+                                    <td class="py-5 font-bold text-slate-900">虛擬視覺總監 / 廠商監修</td>
+                                </tr>
+                                <tr class="border-b border-slate-100">
+                                    <td class="py-5 font-medium">預算彈性</td>
+                                    <td class="py-5">固定薪資成本</td>
+                                    <td class="py-5 font-bold text-slate-900">支援月單位暫停保留</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-5 font-medium">管理成本</td>
+                                    <td class="py-5">需日常行政與績效管理</td>
+                                    <td class="py-5 font-bold text-slate-900">主動彙報、自動遞補執行</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 詳情頁面：Premium+ -->
+    <article id="page-premium-plus" class="page-content bg-white theme-plus text-left">
+        <header class="py-24 detail-header text-center px-6">
+            <div class="max-w-4xl mx-auto">
+                <span class="inline-block bg-slate-900 text-white px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6 font-poppins">Virtual Art Department Head</span>
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-slate-900 uppercase">Premium+ 戰略代理</h2>
+                <p class="text-lg text-slate-600 leading-relaxed font-medium mb-8">「買回老闆的時間。將複雜的視覺決策與監修雜事交由專業代理。」</p>
+                <div class="inline-flex gap-4">
+                    <span class="bg-amber-50 text-amber-700 px-6 py-2 rounded-full font-bold text-sm border border-amber-100">
+                        <i class="fa-solid fa-tag mr-2 text-amber-500"></i> 初期合作優惠：$35,000 (原價 $50,000)
+                    </span>
+                </div>
+            </div>
+        </header>
+        <section class="py-20 px-6 max-w-6xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-20 items-start mb-24">
+                <div class="rounded-[2.5rem] overflow-hidden shadow-2xl border border-slate-100 group">
+                    <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=1000&auto=format&fit=crop" alt="[視覺總監代管示意圖]" class="w-full h-auto group-hover:scale-105 transition-transform duration-700">
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold mb-10 text-slate-900 border-l-4 border-amber-500 pl-4 uppercase font-poppins tracking-tight">Strategic Agency Values</h3>
+                    <div class="space-y-10">
+                        <div class="flex gap-6">
+                            <div class="feature-icon-box bg-slate-900 text-white shadow-lg shadow-slate-900/20"><i class="fa-solid fa-shield-halved"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2 text-slate-900 text-left">品質與風險全權代管</h4>
+                                <p class="text-slate-500 text-sm leading-relaxed text-left text-left">代表品牌對接廠商確認打樣。核對 3D 比例、Pantone 色標與刀模規範，並執行嚴格的「Golden Sample」確認流程，將大貨生產風險降至零。</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6">
+                            <div class="feature-icon-box bg-slate-900 text-white shadow-lg shadow-slate-900/20"><i class="fa-solid fa-wand-sparkles"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2 text-slate-900 text-left">主動優化策略 (Active)</h4>
+                                <p class="text-slate-500 text-sm leading-relaxed text-left text-left">當案件量較少時，我們不會讓插槽空轉。我會主動發起「視覺負債盤點」，優化過時素材，讓品牌資產隨著時間持續增值。</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6">
+                            <div class="feature-icon-box bg-slate-900 text-white shadow-lg shadow-slate-900/20"><i class="fa-solid fa-truck-ramp-box"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2 text-slate-900 text-left">產能動態釋放機制</h4>
+                                <p class="text-slate-500 text-sm leading-relaxed text-left text-left">實體專案印製期間（工廠端）不佔用插槽。該頻寬自動釋放處理其他任務，確保月費每一秒都在產出價值。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center py-10 bg-slate-50 rounded-3xl"><button onclick="showPage('home', 'pricing')" class="back-btn px-10 py-4 rounded-full text-slate-500 font-bold uppercase text-sm shadow-sm"><i class="fa-solid fa-arrow-left mr-3"></i>Back to Plans</button></div>
+        </section>
+    </article>
+
+    <!-- 詳情頁面：Premium -->
+    <article id="page-premium" class="page-content bg-white theme-premium text-left">
+        <header class="py-24 detail-header text-center px-6">
+            <div class="max-w-4xl mx-auto text-center">
+                <span class="inline-block bg-purple-600 text-white px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6 font-poppins">Dual-Track Performance</span>
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-purple-900 uppercase text-center">Premium 資產系統</h2>
+                <p class="text-lg text-slate-600 leading-relaxed font-medium">「建置一套視覺武器庫。不僅僅是加速產出，更是為品牌建立可復用的體系。」</p>
+                <div class="mt-8 inline-block px-6 py-2 bg-purple-50 border border-purple-200 rounded-full text-purple-700 font-bold text-sm">
+                    <i class="fa-solid fa-tag mr-2 text-purple-500"></i> 目前提供首次協作優惠：單月 $25,000 (原價 $35,000)
+                </div>
+            </div>
+        </header>
+        <section class="py-20 px-6 max-w-6xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-20 items-start mb-24 text-left">
+                <div class="bg-purple-900 text-white p-12 rounded-[3rem] shadow-2xl relative overflow-hidden flex flex-col justify-center min-h-[450px]">
+                    <div class="absolute -top-20 -right-20 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl"></div>
+                    <h3 class="text-3xl font-bold mb-8 font-poppins leading-tight">Design + Revision<br>Dual Slots System</h3>
+                    <p class="opacity-80 leading-relaxed mb-12 text-base">
+                        解決「改一個字也要排隊一周」的困局。一個插槽用於全新項目開發；另一個負責快速修正，產能效率提升 200%。
+                    </p>
+                    <div class="grid grid-cols-2 gap-6 relative z-10">
+                        <div class="p-6 bg-white/10 rounded-2xl text-center border border-white/10"><div class="text-2xl font-bold mb-1">ASSET</div><p class="text-[10px] opacity-60 uppercase font-bold tracking-widest">Building</p></div>
+                        <div class="p-6 bg-white/10 rounded-2xl text-center border border-white/10"><div class="text-2xl font-bold mb-1">24H</div><p class="text-[10px] opacity-60 uppercase font-bold tracking-widest">Priority</p></div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold mb-10 text-purple-900 border-l-4 border-purple-600 pl-4 uppercase font-poppins tracking-tight">System Construction Values</h3>
+                    <div class="space-y-10">
+                        <div class="flex gap-6">
+                            <div class="feature-icon-box bg-purple-100 text-purple-600 shadow-md"><i class="fa-solid fa-object-group"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2 text-purple-900">全通路行銷版型建置</h4>
+                                <p class="text-slate-500 text-sm leading-relaxed text-left text-left">建置一套包含 FB/IG/Line 的統一廣告模板。讓後續即使在 Essential 階段也能維持專業視覺水準。</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6">
+                            <div class="feature-icon-box bg-purple-100 text-purple-600 shadow-md"><i class="fa-solid fa-vial-circle-check"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2 text-purple-900">A/B Testing 視覺支援</h4>
+                                <p class="text-slate-500 text-sm leading-relaxed text-left text-left">製作不同視覺風格的素材。透過數據驗證哪種設計轉換率最高，優化廣告投放成本。</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6">
+                            <div class="feature-icon-box bg-purple-100 text-purple-600 shadow-md"><i class="fa-solid fa-laptop-code"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2 text-purple-900 text-left">Landing Page 視覺重構</h4>
+                                <p class="text-slate-500 text-sm leading-relaxed text-left text-left">針對行銷動線優化網頁 UI。讓課程報名頁具備更強的說服力，提升整體轉化表現。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center py-10 bg-slate-50 rounded-3xl"><button onclick="showPage('home', 'pricing')" class="back-btn px-10 py-4 rounded-full text-slate-500 font-bold uppercase text-sm shadow-sm"><i class="fa-solid fa-arrow-left mr-3"></i>Back to Plans</button></div>
+        </section>
+    </article>
+
+    <!-- 詳情頁面：Essential -->
+    <article id="page-essential" class="page-content bg-white theme-essential text-left">
+        <header class="py-24 detail-header text-center px-6">
+            <div class="max-w-4xl mx-auto text-center">
+                <span class="inline-block bg-blue-600 text-white px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6 font-poppins">Baseline Maintenance</span>
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-blue-900 uppercase text-center">Essential 基礎守護</h2>
+                <p class="text-lg text-slate-600 leading-relaxed font-medium text-center">「最穩定的視覺備品。讓日常更新始終高品質、不費力。」</p>
+                <div class="mt-8 inline-block px-6 py-2 bg-blue-50 border border-blue-200 rounded-full text-blue-700 font-bold text-sm text-center">
+                    <i class="fa-solid fa-tag mr-2 text-blue-500"></i> 目前提供首次協作優惠：單月 $15,000 (原價 $20,000)
+                </div>
+            </div>
+        </header>
+        <section class="py-20 px-6 max-w-6xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-20 items-start mb-24 text-left">
+                <div class="bg-blue-50 p-12 rounded-[3rem] border border-blue-100 shadow-inner flex flex-col justify-center min-h-[450px]">
+                    <h3 class="text-3xl font-bold mb-10 text-blue-900 text-center font-poppins leading-tight">Pure Execution Line</h3>
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-blue-100">
+                            <h4 class="font-bold mb-2 text-blue-900 flex items-center gap-2"><i class="fa-solid fa-circle-info text-blue-500"></i> 硬性規則</h4>
+                            <p class="text-blue-800/80 text-sm leading-relaxed">插槽在資料齊備後啟動。若資料不全導致空轉，服務天數依然照常計費。</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-blue-100">
+                            <h4 class="font-bold mb-2 text-blue-900 flex items-center gap-2"><i class="fa-solid fa-ban text-red-500"></i> 拒絕諮詢</h4>
+                            <p class="text-blue-800/80 text-sm leading-relaxed text-left text-left">本方案不含風格提案與策略。專注於純粹執行已有規範之成熟教材排版項目。</p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold mb-10 text-blue-900 border-l-4 border-blue-600 pl-4 uppercase font-poppins tracking-tight">Maintenance Standards</h3>
+                    <div class="space-y-10">
+                        <div class="flex gap-6 text-left text-left">
+                            <div class="feature-icon-box bg-blue-100 text-blue-600 shadow-md"><i class="fa-solid fa-layer-group text-left text-left"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2 text-blue-900 text-left text-left">單插槽穩健輸出</h4>
+                                <p class="text-slate-500 text-sm leading-relaxed text-left text-left text-left">一次專注處理一項任務。適合已有固定模板的教材更新、廣告修改等高頻執行工作。</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6 opacity-60 grayscale text-left text-left">
+                            <div class="feature-icon-box bg-slate-100 text-slate-400 text-left text-left"><i class="fa-solid fa-circle-minus text-left text-left"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2 text-slate-400 text-left text-left">排除主動建議服務</h4>
+                                <p class="text-slate-400 text-sm leading-relaxed italic text-left text-left text-left">採被動排期：甲方資料齊備即開工。我們將不主動進行品牌資產盤點或優化。</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6 text-blue-900 text-left text-left">
+                            <div class="feature-icon-box bg-blue-100 text-blue-600 shadow-md text-left text-left"><i class="fa-solid fa-calendar-check text-left text-left"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2 text-left text-left">季度月單位暫停權</h4>
+                                <p class="text-slate-500 text-sm leading-relaxed text-left text-left text-left text-left">享有保險機制：若行銷空窗期長，可申請暫停一個月執行期並保留一年使用權。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center py-10 bg-slate-50 rounded-3xl"><button onclick="showPage('home', 'pricing')" class="back-btn px-10 py-4 rounded-full text-slate-500 font-bold uppercase text-sm shadow-sm"><i class="fa-solid fa-arrow-left mr-3"></i>Back to Plans</button></div>
+        </section>
+    </article>
+
+    <!-- 頁尾 -->
+    <footer id="contact" class="py-24 bg-slate-900 text-white border-t border-white/5 text-center">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="bg-slate-800 p-10 rounded-[2.5rem] border border-slate-700 inline-block text-left shadow-2xl">
+                <div class="text-2xl font-bold mb-2 text-white font-poppins tracking-tight text-center md:text-left">Liping Yu</div>
+                <div class="text-blue-400 font-medium mb-4 text-sm text-center md:text-left">視覺顧問與行銷執行夥伴</div>
+                <div class="p-3 bg-slate-700/50 rounded-xl mb-8 inline-block border border-slate-600">
+                    <span class="text-xs font-bold text-blue-200 uppercase tracking-widest text-center">
+                        <i class="fa-solid fa-award mr-1 text-orange-400 text-left text-left"></i> 初期轉型優惠價・早期預約享有價格保護權
+                    </span>
+                </div>
+                <div class="space-y-4 text-slate-400 text-sm text-left">
+                    <p class="flex items-center gap-3"><i class="fa-solid fa-phone text-blue-500 text-left text-left"></i> 0918-816-140</p>
+                    <p class="flex items-center gap-3"><i class="fa-solid fa-envelope text-blue-500 text-left text-left"></i> lupinart1008@gmail.com</p>
+                </div>
+            </div>
+            <p class="mt-16 text-slate-600 text-[10px] text-center font-bold tracking-widest uppercase opacity-50">
+                &copy; 2026 Liping Yu. All Rights Reserved. Created for Magic Science.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        /**
+         * 切換頁面顯示
+         * @param {string} pageId - 目標頁面的 ID (不含 'page-' 前綴)
+         * @param {string} [sectionId] - 頁面切換後需要定位到的 HTML 元素 ID
+         */
+        function showPage(pageId, sectionId) {
+            const pages = document.querySelectorAll('.page-content');
+            pages.forEach(p => p.classList.remove('active'));
+
+            const targetPage = document.getElementById('page-' + pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                
+                if (sectionId) {
+                    setTimeout(() => {
+                        const element = document.getElementById(sectionId);
+                        if (element) {
+                            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    }, 50);
+                } else {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }
+        }
+    </script>
+</body>
+</html>
