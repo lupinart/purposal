@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="slides-format" content="viewport">
+  <title>方圓共生：海客設計提案</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    @theme {
+      --color-bg: #fdf8ef;
+      --color-bg-deep: #ede2ce;
+      --color-surface: #f4edde;
+      --color-text: #22303a;
+      --color-text-secondary: #4a5c63;
+      --color-text-muted: #7d8e94;
+      --color-accent-1: #2b6557;
+      --color-accent-2: #c26030;
+      --color-accent-3: #ae3830;
+      --color-glass-bg: rgba(255,255,255,0.70);
+      --color-glass-border: rgba(34,48,58,0.09);
+      --color-vignette: rgba(0,0,0,0.05);
+      --font-display: 'Noto Serif TC', serif;
+      --font-body: 'Noto Sans TC', sans-serif;
+    }
+  </style>
+  <style>
+    :root { --color-bg:#fdf8ef; --color-text:#22303a; --glow-color-rgb:43,101,87; }
+    *,*::before,*::after { box-sizing:border-box; }
+    html,body { background:var(--color-bg); margin:0; }
+    body { font-family:var(--font-body); color:var(--color-text); overflow:hidden; height:100vh; width:100vw; }
+    .deck { width:100vw; height:100vh; position:relative; }
+    .slide { position:absolute; top:0; left:0; width:100%; height:100%; background:var(--color-bg); display:flex; flex-direction:column; align-items:center; justify-content:center; opacity:0; transform:scale(0.95); transition:opacity 0.7s ease,transform 0.7s ease; pointer-events:none; overflow:hidden; }
+    .slide.active { opacity:1; transform:scale(1); pointer-events:all; }
+    .slide > .content { position:relative; z-index:2; width:100%; max-width:1160px; padding:clamp(1.5rem,3.5vw,3.2rem); }
+    .nav-controls { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); display:flex; align-items:center; gap:16px; z-index:100; background:rgba(255,255,255,0.88); backdrop-filter:blur(12px); padding:10px 24px; border-radius:40px; border:1px solid rgba(34,48,58,0.08); }
+    .nav-btn { width:40px; height:40px; border:none; background:rgba(34,48,58,0.05); color:var(--color-accent-1); border-radius:50%; font-size:1.2rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background 0.3s; }
+    .nav-btn:hover { background:rgba(34,48,58,0.1); }
+    .slide-dots { display:flex; gap:8px; }
+    .slide-dots .dot { width:10px; height:10px; border-radius:50%; background:rgba(34,48,58,0.14); cursor:pointer; transition:background 0.3s,transform 0.3s; }
+    .slide-dots .dot.active { background:var(--color-accent-1); transform:scale(1.3); }
+    .slide-counter { font-size:0.8rem; color:var(--color-text-muted); min-width:40px; text-align:center; }
+    .reveal { opacity:0; transform:translateY(20px); }
+    .gradient-mesh { position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
+    .blob { position:absolute; border-radius:50%; filter:blur(80px); animation:float-slow 14s ease-in-out infinite; }
+    .blob:nth-child(2) { animation:float-drift 18s ease-in-out infinite; }
+    .blob:nth-child(3) { animation:float-slow 22s ease-in-out infinite reverse; }
+    @keyframes float-slow { 0%{transform:translate(0,0) scale(1);}25%{transform:translate(60px,-50px) scale(1.12);}50%{transform:translate(-40px,40px) scale(0.9);}75%{transform:translate(50px,20px) scale(1.08);}100%{transform:translate(0,0) scale(1);} }
+    @keyframes float-drift { 0%{transform:translate(0,0) scale(1) rotate(0deg);}33%{transform:translate(-50px,-60px) scale(1.15) rotate(3deg);}66%{transform:translate(40px,30px) scale(0.88) rotate(-2deg);}100%{transform:translate(0,0) scale(1) rotate(0deg);} }
+    @keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);} }
+    .slide::before { content:''; position:absolute; inset:0; z-index:1; pointer-events:none; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); background-repeat:repeat; background-size:256px 256px; opacity:0.025; mix-blend-mode:multiply; }
+    .slide::after { content:''; position:absolute; inset:0; z-index:1; pointer-events:none; background:radial-gradient(ellipse at center,transparent 48%,var(--color-vignette) 100%); }
+    .card { background:rgba(255,255,255,0.72); border:1px solid rgba(34,48,58,0.09); box-shadow:0 14px 32px rgba(0,0,0,0.06); border-radius:22px; }
+    .tag { display:inline-flex; align-items:center; font-size:.75rem; letter-spacing:.14em; text-transform:uppercase; color:var(--color-accent-1); border:1px solid rgba(43,101,87,0.20); padding:.38rem .7rem; border-radius:999px; background:rgba(255,255,255,.6); }
+    .divider { height:1.5px; background:linear-gradient(90deg,var(--color-accent-1),rgba(43,101,87,0)); width:100%; }
+    /* plate SVG ring */
+    .plate-ring { width:260px; height:260px; border-radius:50%; border:2.5px solid rgba(43,101,87,.22); display:flex; align-items:center; justify-content:center; background:radial-gradient(circle at 28% 28%, #fff, #d6e8e0); position:relative; }
+    .plate-ring:before { content:''; position:absolute; inset:22px; border-radius:50%; border:1.5px dashed rgba(43,101,87,.18); }
+    .plate-ring:after { content:''; position:absolute; inset:72px; border-radius:50%; border:1.5px solid rgba(43,101,87,.14); }
+    /* rice box */
+    .rice-box { width:240px; height:168px; background:linear-gradient(160deg,#f0e8d5,#ddd0b0); border:2px solid rgba(194,96,48,.22); box-shadow:0 14px 28px rgba(0,0,0,.08); position:relative; }
+    .rice-box:before { content:''; position:absolute; inset:14px; border:1px dashed rgba(194,96,48,.32); }
+    /* tag shape */
+    .luggage-tag { width:100px; height:148px; background:linear-gradient(180deg,#f8ead6,#f0d4b2); border:1.5px solid rgba(174,56,48,.28); border-radius:20px; box-shadow:0 12px 28px rgba(0,0,0,.09); position:relative; display:flex; flex-direction:column; align-items:center; padding-top:28px; gap:6px; }
+    .luggage-tag:before { content:''; position:absolute; top:10px; left:50%; transform:translateX(-50%); width:20px; height:20px; border-radius:50%; border:2px solid rgba(174,56,48,.36); background:#fff8ef; }
+    .quad-mini { display:grid; grid-template-columns:repeat(2,1fr); gap:5px; }
+    .quad-mini div { width:28px; height:28px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.7rem; color:#fffaf2; }
+    .deco-shape { position:absolute; border-radius:50%; z-index:1; pointer-events:none; }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms !important; transition-duration:.2s !important; } }
+  </style>
+</head>
+<body>
+<div class="mouse-spotlight" style="position:fixed;inset:0;z-index:99;pointer-events:none;"></div>
+<div class="deck">
+
+  <!-- SLIDE 1 : 封面 -->
+  <div class="slide slide-1 active" data-slide="1">
+    <div class="gradient-mesh">
+      <div class="blob" style="width:480px;height:480px;top:-120px;right:-100px;background:rgba(43,101,87,.16);"></div>
+      <div class="blob" style="width:360px;height:360px;bottom:-100px;left:-80px;background:rgba(194,96,48,.13);"></div>
+      <div class="blob" style="width:200px;height:200px;top:42%;left:16%;background:rgba(174,56,48,.09);"></div>
+    </div>
+    <canvas class="particle-canvas" style="position:absolute;inset:0;z-index:1;"></canvas>
+    <div class="content text-center">
+      <div class="mx-auto mb-8 reveal" style="width:200px;height:200px;border-radius:50%;border:2.5px solid rgba(43,101,87,.22);display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 30% 30%,rgba(43,101,87,.12),rgba(255,255,255,.5));animation:float 4s ease-in-out infinite;position:relative;">
+        <div style="position:absolute;inset:18px;border-radius:50%;border:1px dashed rgba(43,101,87,.2);"></div>
+        <div style="text-align:center;">
+          <div style="font-size:.75rem;letter-spacing:.3em;color:var(--color-text-muted);margin-bottom:.4rem;">新屋 XINWU</div>
+          <div style="font-family:'Noto Serif TC',serif;font-size:2rem;font-weight:900;color:var(--color-accent-1);line-height:1;">方圓</div>
+          <div style="font-family:'Noto Serif TC',serif;font-size:2rem;font-weight:900;color:var(--color-accent-2);line-height:1;">共生</div>
+        </div>
+      </div>
+      <h1 class="font-display font-black tracking-tight reveal" style="font-size:clamp(2rem,4.8vw,4.2rem);line-height:1.2;">海客設計提案</h1>
+            <p class="mt-5 reveal" style="font-size:clamp(.85rem,1.3vw,1.1rem);letter-spacing:.28em;text-transform:uppercase;color:var(--color-text-muted);">新屋的海岸、農地與信仰：三件地方物件設計</p>
+   <div class="mt-8 reveal" style="font-size:clamp(.75rem, 1vw, 0.95rem); letter-spacing:.1em; color:var(--color-text-muted);">
+  <span style="margin-right: 12px;">11483602</span>
+  <span style="margin-right: 12px;">余莉苹</span>
+  <span>碩專一</span>
+</div>
+            </div>
+  </div>
+
+  <!-- SLIDE 2 : 核心敘事 -->
+  <div class="slide slide-2" data-slide="2">
+    <div class="gradient-mesh">
+      <div class="blob" style="width:300px;height:300px;top:-60px;right:-50px;background:rgba(43,101,87,.09);"></div>
+      <div class="blob" style="width:260px;height:260px;bottom:-50px;left:-40px;background:rgba(194,96,48,.08);"></div>
+    </div>
+    <div class="deco-shape" data-speed="0.03" style="width:160px;height:160px;top:8%;left:4%;opacity:.1;background:rgba(43,101,87,.6);"></div>
+    <div class="content">
+      <div class="tag reveal">核心敘事</div>
+      <h2 class="font-display font-black mt-5 mb-3 reveal" style="font-size:clamp(1.8rem,3.8vw,3rem);">一海・一田・一信仰</h2>
+      <p class="reveal" style="font-size:1.15rem;line-height:2;color:var(--color-text-secondary);max-width:880px;">海，對應生存；田，對應生產；信仰，對應精神。<br><br>這三者不是三個主題而已，是共同構成新屋地方生活的三條脈絡。</p>
+      <div class="divider mt-8 mb-8 reveal"></div>
+      <div class="grid gap-5 reveal" style="grid-template-columns:repeat(3,1fr);">
+        <div class="card p-6">
+          <div class="font-display font-black mb-2" style="font-size:1.5rem;color:var(--color-accent-1);">◯　海</div>
+          <div style="color:var(--color-text-secondary);line-height:1.9;">對應生存。順應潮汐運作的海岸生存智慧。</div>
+        </div>
+        <div class="card p-6">
+          <div class="font-display font-black mb-2" style="font-size:1.5rem;color:var(--color-accent-2);">□　田</div>
+          <div style="color:var(--color-text-secondary);line-height:1.9;">對應生產。土地、穩定與農業節奏的具象化。</div>
+        </div>
+        <div class="card p-6">
+          <div class="font-display font-black mb-2" style="font-size:1.5rem;color:var(--color-accent-3);">✢　信仰</div>
+          <div style="color:var(--color-text-secondary);line-height:1.9;">對應精神。從廟宇空間延伸至日常移動的記憶載體。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3 : SKU 01 海 -->
+  <div class="slide slide-3" data-slide="3">
+    <div class="gradient-mesh">
+      <div class="blob" style="width:380px;height:380px;top:-80px;right:-70px;background:rgba(43,101,87,.12);"></div>
+      <div class="blob" style="width:220px;height:220px;bottom:-40px;left:-30px;background:rgba(43,101,87,.07);"></div>
+    </div>
+    <div class="deco-shape" data-speed="0.04" style="width:110px;height:110px;bottom:16%;right:8%;opacity:.12;background:rgba(43,101,87,.8);"></div>
+    <div class="content">
+      <div class="grid gap-10 items-center" style="grid-template-columns:1.05fr 0.95fr;">
+        <div>
+          <div class="tag reveal">SKU 01　海</div>
+          <h2 class="font-display font-black mt-5 mb-4 reveal" style="font-size:clamp(1.9rem,3.8vw,3.1rem);">石滬餐盤</h2>
+          <p class="reveal" style="font-size:1.08rem;line-height:2;color:var(--color-text-secondary);">提取新屋石滬的有機曲線—，轉化為陶瓷器皿的紋理語言。新屋百年石滬群是以石塊堆築、順應潮汐運作的海岸文化景觀，這樣的構造本身就帶有一種與自然共存的邏輯。</p>
+          <div class="grid gap-4 mt-7" style="grid-template-columns:repeat(2,1fr);">
+            <div class="card p-5 reveal">
+              <div style="font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--color-text-muted);margin-bottom:.4rem;">形式語言</div>
+              <div class="font-display font-bold" style="font-size:1.4rem;color:var(--color-accent-1);">圓</div>
+              <div style="color:var(--color-text-secondary);line-height:1.9;margin-top:.3rem;">對應潮汐往復與自然循環。</div>
+            </div>
+            <div class="card p-5 reveal">
+              <div style="font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--color-text-muted);margin-bottom:.4rem;">材質與工藝</div>
+              <div class="font-display font-bold" style="font-size:1.4rem;color:var(--color-accent-1);">陶瓷與紋理</div>
+              <div style="color:var(--color-text-secondary);line-height:1.9;margin-top:.3rem;">以陶瓷承接石滬曲線紋路，轉化為器皿語言。</div>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-col gap-4">
+          <div class="card p-6 reveal flex items-center justify-center gap-6">
+            <div class="plate-ring" style="flex-shrink:0;width:140px;height:140px;">
+              <svg viewBox="0 0 160 160" style="position:absolute;inset:24px;width:calc(100% - 48px);height:calc(100% - 48px);">
+                <path d="M80,80 L80,20" stroke="rgba(43,101,87,.22)" stroke-width="1.5" fill="none"/>
+                <path d="M80,80 L128,110" stroke="rgba(43,101,87,.22)" stroke-width="1.5" fill="none"/>
+                <path d="M80,80 L32,110" stroke="rgba(43,101,87,.22)" stroke-width="1.5" fill="none"/>
+                <path d="M22,60 C55,30 105,30 138,60" fill="none" stroke="rgba(43,101,87,.55)" stroke-width="9" stroke-linecap="round"/>
+                <path d="M20,100 C50,130 110,130 140,100" fill="none" stroke="rgba(43,101,87,.28)" stroke-width="7" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <img src="新屋石滬現場.jpg" alt="石滬現場" style="flex:1;min-width:0;max-height:300px;object-fit:cover;border-radius:16px;">
+          </div>
+          <div class="card p-2 reveal flex items-center justify-center overflow-hidden">
+            <img src="01.png" alt="石滬餐盤" style="width:100%; max-height:220px; object-fit:contain; display:block; border-radius:16px;">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 : SKU 02 田 -->
+  <div class="slide slide-4" data-slide="4">
+    <div class="gradient-mesh">
+      <div class="blob" style="width:340px;height:340px;top:-80px;left:-60px;background:rgba(194,96,48,.12);"></div>
+      <div class="blob" style="width:220px;height:220px;bottom:-40px;right:-30px;background:rgba(194,96,48,.07);"></div>
+    </div>
+    <div class="content">
+      <div class="grid gap-10 items-center" style="grid-template-columns:0.95fr 1.05fr;">
+        <div class="flex flex-col gap-4">
+          <div class="card p-6 reveal flex items-center justify-center">
+            <div class="rice-box">
+              <div style="position:absolute;left:16px;top:14px;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(78,92,99,.75);">桃園3號・新香米</div>
+              <div style="position:absolute;right:16px;top:14px;font-size:.68rem;letter-spacing:.12em;color:rgba(78,92,99,.65);">600 g</div>
+              <div style="position:absolute;left:18px;bottom:20px;font-family:'Noto Serif TC',serif;font-size:1.3rem;font-weight:900;color:var(--color-accent-2);">方</div>
+              <div style="position:absolute;right:18px;bottom:20px;font-size:.65rem;letter-spacing:.1em;color:rgba(78,92,99,.6);text-align:right;">15 × 8 × 5 cm</div>
+            </div>
+          </div>
+          <div class="card p-2 reveal flex items-center justify-center overflow-hidden">
+            <img src="02.png" alt="桃園3號新香米包裝" style="width:100%; max-height:240px; object-fit:contain; display:block; border-radius:16px;">
+          </div>
+        </div>
+        <div>
+          <div class="tag reveal">SKU 02　田</div>
+          <h2 class="font-display font-black mt-5 mb-4 reveal" style="font-size:clamp(1.9rem,3.8vw,3.1rem);">桃園3號新香米包裝</h2>
+          <p class="reveal" style="font-size:1.08rem;line-height:2;color:var(--color-text-secondary);">這次內容物特別選用桃園在地育成的「桃園 3 號」米。這款米帶有獨特的天然芋頭香氣，是最適應新屋沿海風土與氣候的代表性品種。<br><br>透過包裝設計，希望能將這款香米的稻作時間壓縮成可閱讀的圖像。</p>
+          <div class="grid gap-4 mt-7" style="grid-template-columns:repeat(2,1fr);">
+            <div class="card p-5 reveal">
+              <div style="font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--color-text-muted);margin-bottom:.4rem;">形式語言</div>
+              <div class="font-display font-bold" style="font-size:1.4rem;color:var(--color-accent-2);">方</div>
+              <div style="color:var(--color-text-secondary);line-height:1.9;margin-top:.3rem;">對應土地、穩定與生產。</div>
+            </div>
+            <div class="card p-5 reveal">
+              <div style="font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--color-text-muted);margin-bottom:.4rem;">畫面設計</div>
+              <div class="font-display font-bold" style="font-size:1.4rem;color:var(--color-accent-2);">稻作節奏敘事</div>
+              <div style="color:var(--color-text-secondary);line-height:1.9;margin-top:.3rem;">以稻作曆、節氣、插秧到收割的節奏做版面設計。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 : SKU 03 信仰 -->
+  <div class="slide slide-5" data-slide="5">
+    <div class="gradient-mesh">
+      <div class="blob" style="width:320px;height:320px;top:-70px;right:-50px;background:rgba(174,56,48,.11);"></div>
+      <div class="blob" style="width:230px;height:230px;bottom:-40px;left:-30px;background:rgba(194,96,48,.07);"></div>
+    </div>
+    <div class="deco-shape" data-speed="0.035" style="width:130px;height:130px;top:12%;left:6%;opacity:.1;background:rgba(174,56,48,.8);"></div>
+    <div class="content">
+      <div class="grid gap-10 items-center" style="grid-template-columns:1.05fr 0.95fr;">
+        <div>
+          <div class="tag reveal">SKU 03　信仰</div>
+          <h2 class="font-display font-black mt-5 mb-4 reveal" style="font-size:clamp(1.9rem,3.8vw,3.1rem);">甘泉寺石觀音行李吊牌</h2>
+          <p class="reveal" style="font-size:1.08rem;line-height:2;color:var(--color-text-secondary);">以「甘泉寺石觀音」作為主標，將地方信仰轉譯為四格連續紋樣。四格分別對應：風、調、雨、順，象徵新屋從海岸、農田到信仰的生活循環。</p>
+          <div class="grid gap-4 mt-7" style="grid-template-columns:repeat(2,1fr);">
+            <div class="card p-5 reveal">
+              <div style="font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--color-text-muted);margin-bottom:.4rem;">風・調</div>
+              <div class="font-display font-bold" style="font-size:1.4rem;color:var(--color-accent-3);">海風與信仰秩序</div>
+              <div style="color:var(--color-text-secondary);line-height:1.9;margin-top:.3rem;">「風」以石滬表現海風；「調」以香火與廟埕表現安定感。</div>
+            </div>
+            <div class="card p-5 reveal">
+              <div style="font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--color-text-muted);margin-bottom:.4rem;">雨・順</div>
+              <div class="font-display font-bold" style="font-size:1.4rem;color:var(--color-accent-3);">甘泉與土地豐收</div>
+              <div style="color:var(--color-text-secondary);line-height:1.9;margin-top:.3rem;">「雨」轉化甘泉水波紋；「順」以稻穗彎曲象徵生活豐收。</div>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-col gap-4">
+          <div class="card p-6 reveal flex items-center justify-center gap-6">
+            <div class="luggage-tag" style="flex-shrink:0;">
+              <div class="quad-mini">
+                <div style="background:#ae3830;">風</div>
+                <div style="background:#c26030;">調</div>
+                <div style="background:#c97040;">雨</div>
+                <div style="background:#8a2e28;">順</div>
+              </div>
+              <div style="margin-top:10px;font-size:.6rem;letter-spacing:.12em;color:rgba(90,60,50,.6);text-align:center;">甘泉寺石觀音</div>
+              <div style="margin-top:4px;font-size:.6rem;letter-spacing:.08em;color:rgba(90,60,50,.5);text-align:center;">新屋 XINWU</div>
+            </div>
+            <img src="Guanyin_風調雨順.png" alt="廟宇現場" style="flex:1;min-width:0;max-height:220px;object-fit:cover;border-radius:16px;">
+          </div>
+          <div class="card p-2 reveal flex items-center justify-center overflow-hidden">
+            <img src="03.png" alt="甘泉寺石觀音行李吊牌" style="width:100%; max-height:180px; object-fit:contain; display:block; border-radius:16px;">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6 : 系統整合 -->
+  <div class="slide slide-6" data-slide="6">
+    <div class="gradient-mesh">
+      <div class="blob" style="width:380px;height:380px;top:-90px;right:-70px;background:rgba(43,101,87,.13);"></div>
+      <div class="blob" style="width:300px;height:300px;bottom:-70px;left:-50px;background:rgba(194,96,48,.11);"></div>
+      <div class="blob" style="width:200px;height:200px;top:38%;left:12%;background:rgba(174,56,48,.07);"></div>
+    </div>
+    <canvas class="particle-canvas" style="position:absolute;inset:0;z-index:1;"></canvas>
+    <div class="content">
+      <div class="grid gap-10 items-center" style="grid-template-columns:1fr 1fr;">
+        <div>
+          <div class="tag reveal">合體與結構</div>
+          <h2 class="font-display font-black mt-5 mb-3 reveal" style="font-size:clamp(1.9rem,3.8vw,3rem);">方圓之間　1 + 1 + 1 &gt; 3</h2>
+          <p class="reveal" style="font-size:1.05rem;line-height:2;color:var(--color-text-secondary);">圓盤對應海，方形包裝對應田，上方吊牌對應信仰。海的循環、田的秩序、信仰的連結，透過上下層次被組織成一個整體。。</p>
+          <div class="grid gap-4 mt-7">
+            <div class="card p-4 reveal" style="border-left:3.5px solid var(--color-accent-1);">
+              <div class="font-display font-black mb-1" style="font-size:1.1rem;color:var(--color-accent-1);">◯ 海　石滬餐盤</div>
+              <div style="color:var(--color-text-secondary);font-size:.9rem;">圓形地景轉譯，承載沿岸生存智慧。</div>
+            </div>
+            <div class="card p-4 reveal" style="border-left:3.5px solid var(--color-accent-2);">
+              <div class="font-display font-black mb-1" style="font-size:1.1rem;color:var(--color-accent-2);">□ 田　白米方盒</div>
+              <div style="color:var(--color-text-secondary);font-size:.9rem;">方形農業秩序，承載在地土地重量。</div>
+            </div>
+            <div class="card p-4 reveal" style="border-left:3.5px solid var(--color-accent-3);">
+              <div class="font-display font-black mb-1" style="font-size:1.1rem;color:var(--color-accent-3);">✢ 信仰　行李吊牌</div>
+              <div style="color:var(--color-text-secondary);font-size:.9rem;">居中的文化鎖扣，讓海田關係得以成立。</div>
+            </div>
+          </div>
+        </div>
+        <div class="card p-3 reveal flex items-center justify-center overflow-hidden">
+          <img src="04.png" alt="系統整合" style="width:100%; max-height:480px; object-fit:contain; display:block; border-radius:16px;">
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="nav-controls">
+  <button class="nav-btn" onclick="changeSlide(-1)" aria-label="上一頁">&#8249;</button>
+  <div class="slide-dots" id="dots"></div>
+  <button class="nav-btn" onclick="changeSlide(1)" aria-label="下一頁">&#8250;</button>
+  <span class="slide-counter" id="counter">1 / 6</span>
+</div>
+
+<script>
+let current = 1;
+const total = document.querySelectorAll('.slide').length;
+const dotsContainer = document.getElementById('dots');
+const counter = document.getElementById('counter');
+for (let i = 1; i <= total; i++) { const dot = document.createElement('div'); dot.className = 'dot' + (i === 1 ? ' active' : ''); dot.onclick = () => goToSlide(i); dotsContainer.appendChild(dot); }
+function goToSlide(n) {
+  const prev = document.querySelector('.slide.active');
+  const next = document.querySelector(`.slide[data-slide="${n}"]`);
+  if (prev) prev.classList.remove('active');
+  if (next) { next.classList.add('active'); animateSlide(next); }
+  current = n; updateNav();
+}
+function changeSlide(dir) { let next = current + dir; if (next < 1) next = total; if (next > total) next = 1; goToSlide(next); }
+function updateNav() { document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i + 1 === current)); counter.textContent = current + ' / ' + total; }
+document.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); changeSlide(1); } if (e.key === 'ArrowLeft') { e.preventDefault(); changeSlide(-1); } });
+let touchStartX = 0;
+document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', (e) => { const diff = touchStartX - e.changedTouches[0].clientX; if (Math.abs(diff) > 50) changeSlide(diff > 0 ? 1 : -1); });
+function animateSlide(slide) {
+  slide.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transition = 'none'; el.style.opacity = '0'; el.style.transform = 'translateY(20px)'; el.offsetHeight;
+    const delay = i * 0.08;
+    el.style.transition = `opacity 0.36s ease ${delay}s, transform 0.36s ease ${delay}s`;
+    el.style.opacity = '1'; el.style.transform = 'translateY(0)';
+  });
+}
+document.addEventListener('mousemove', (e) => {
+  const s = document.querySelector('.mouse-spotlight');
+  if (s) s.style.background = `radial-gradient(600px circle at ${e.clientX}px ${e.clientY}px, rgba(43,101,87,0.05), transparent 40%)`;
+});
+(function() {
+  let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+  const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+  document.addEventListener('mousemove', (e) => { mx = e.clientX; my = e.clientY; });
+  (function tick() {
+    const ox = (mx - cx) / cx, oy = (my - cy) / cy;
+    document.querySelectorAll('.deco-shape').forEach(shape => {
+      const sp = parseFloat(shape.dataset.speed) || 0.03;
+      shape.style.transform = `translate(${ox * sp * 100}px, ${oy * sp * 100}px)`;
+    });
+    requestAnimationFrame(tick);
+  })();
+})();
+window.initParticles = function(canvas, options) {
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+  const interactive = options.interactive !== false;
+  const count = options.count || (interactive ? 40 : 16);
+  let mx = -1000, my = -1000;
+  const pts = Array.from({ length: count }, () => ({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, vx: (Math.random() - 0.5) * 0.28, vy: (Math.random() - 0.5) * 0.28, size: Math.random() * 2.2 + 0.8, alpha: Math.random() * 0.28 + 0.07 }));
+  if (interactive) {
+    canvas.addEventListener('mousemove', (e) => { const r = canvas.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; });
+    canvas.addEventListener('mouseleave', () => { mx = -1000; my = -1000; });
+  }
+  (function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pts.forEach(p => {
+      if (interactive) { const dx = p.x - mx, dy = p.y - my, dist = Math.sqrt(dx*dx+dy*dy)||1; if (dist < 120) { const f = (120 - dist) / 120 * 2; p.vx += (dx/dist)*f*0.1; p.vy += (dy/dist)*f*0.1; } }
+      p.vx *= 0.98; p.vy *= 0.98; p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0;
+      if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(43,101,87,${p.alpha})`; ctx.fill();
+    });
+    requestAnimationFrame(animate);
+  })();
+};
+document.querySelectorAll('.particle-canvas').forEach(c => window.initParticles(c, { interactive: true, count: 90 }));
+document.querySelectorAll('.particle-canvas-ambient').forEach(c => window.initParticles(c, { interactive: false, count: 16 }));
+try { animateSlide(document.querySelector('.slide.active')); } catch(e) {}
+</script>
+</body>
+</html>
