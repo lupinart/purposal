@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>幸運轉盤</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #eef2ff;
+      --panel: #ffffff;
+      --ink: #1e1b4b;
+      --muted: #625f85;
+      --line: #d8def8;
+      --primary: #4f46e5;
+      --primary-dark: #3730a3;
+      --accent: #f97316;
+      --accent-dark: #c2410c;
+      --good: #059669;
+      --shadow: 0 22px 55px rgba(55, 48, 163, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(249, 115, 22, 0.15), transparent 26rem),
+        radial-gradient(circle at 90% 20%, rgba(79, 70, 229, 0.16), transparent 30rem),
+        var(--bg);
+      color: var(--ink);
+      font-family: ui-rounded, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+      line-height: 1.5;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .app {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 36px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 46px);
+      letter-spacing: 0;
+    }
+
+    .status-pill {
+      border: 2px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--primary-dark);
+      padding: 8px 14px;
+      font-weight: 800;
+      white-space: nowrap;
+      box-shadow: 0 8px 0 rgba(79, 70, 229, 0.08);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(300px, 1fr) minmax(320px, 420px);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .wheel-stage,
+    .control-panel {
+      border: 3px solid var(--ink);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: var(--shadow), 0 8px 0 rgba(30, 27, 75, 0.08);
+    }
+
+    .wheel-stage {
+      position: relative;
+      min-height: 620px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      padding: 30px;
+      overflow: hidden;
+    }
+
+    .wheel-shell {
+      position: relative;
+      width: min(100%, 540px);
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      filter: drop-shadow(0 18px 20px rgba(30, 27, 75, 0.22));
+      transform: rotate(0rad);
+      will-change: transform;
+    }
+
+    .pointer {
+      position: absolute;
+      top: -4px;
+      left: 50%;
+      z-index: 3;
+      width: 42px;
+      height: 58px;
+      transform: translateX(-50%);
+      filter: drop-shadow(0 8px 0 rgba(30, 27, 75, 0.16));
+    }
+
+    .pointer::before {
+      content: "";
+      display: block;
+      width: 0;
+      height: 0;
+      margin: 0 auto;
+      border-left: 21px solid transparent;
+      border-right: 21px solid transparent;
+      border-top: 58px solid var(--accent);
+    }
+
+    .hub {
+      position: absolute;
+      z-index: 2;
+      width: 132px;
+      aspect-ratio: 1;
+      border: 3px solid var(--ink);
+      border-radius: 50%;
+      background: var(--panel);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--primary-dark);
+      box-shadow: inset 0 -8px 0 rgba(79, 70, 229, 0.12), 0 10px 0 rgba(30, 27, 75, 0.08);
+      pointer-events: none;
+    }
+
+    .result {
+      width: min(100%, 540px);
+      min-height: 74px;
+      border: 3px solid var(--ink);
+      border-radius: 18px;
+      background: #fff7ed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 14px 16px;
+      font-size: clamp(22px, 3vw, 34px);
+      font-weight: 900;
+      color: var(--accent-dark);
+      box-shadow: 0 8px 0 rgba(249, 115, 22, 0.18);
+    }
+
+    .control-panel {
+      padding: 20px;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    input {
+      width: 100%;
+      min-height: 48px;
+      border: 2px solid var(--line);
+      border-radius: 14px;
+      padding: 0 14px;
+      color: var(--ink);
+      background: #fff;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+    }
+
+    .btn {
+      min-height: 48px;
+      border: 3px solid var(--ink);
+      border-radius: 14px;
+      padding: 0 16px;
+      background: #fff;
+      color: var(--ink);
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 6px 0 rgba(30, 27, 75, 0.18);
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 7px 0 rgba(30, 27, 75, 0.2);
+    }
+
+    .btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 rgba(30, 27, 75, 0.2);
+    }
+
+    .btn:focus-visible {
+      outline: 4px solid rgba(249, 115, 22, 0.35);
+      outline-offset: 3px;
+    }
+
+    .btn.primary {
+      width: 100%;
+      margin: 16px 0 18px;
+      min-height: 60px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 20px;
+    }
+
+    .btn.primary:disabled {
+      cursor: not-allowed;
+      opacity: 0.68;
+      transform: none;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .metric {
+      border: 2px solid var(--line);
+      border-radius: 16px;
+      padding: 12px;
+      background: #f8fafc;
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 2px;
+      font-size: 24px;
+      line-height: 1.1;
+    }
+
+    .people-list {
+      display: grid;
+      gap: 8px;
+      max-height: 310px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .person {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      border: 2px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      padding: 10px 10px 10px 14px;
+    }
+
+    .person strong {
+      overflow-wrap: anywhere;
+    }
+
+    .person.target {
+      border-color: rgba(5, 150, 105, 0.5);
+      background: #ecfdf5;
+    }
+
+    .remove {
+      width: 38px;
+      height: 38px;
+      border: 2px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      color: var(--muted);
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .remove:hover {
+      color: #b91c1c;
+      border-color: #fecaca;
+      background: #fef2f2;
+    }
+
+    .hint {
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 860px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .wheel-stage {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .app {
+        width: min(100% - 20px, 1120px);
+        padding-top: 16px;
+      }
+
+      .topbar,
+      .field-row {
+        grid-template-columns: 1fr;
+        display: grid;
+      }
+
+      .status-pill {
+        white-space: normal;
+      }
+
+      .wheel-stage,
+      .control-panel {
+        border-radius: 18px;
+      }
+
+      .hub {
+        width: 94px;
+        font-size: 16px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 1ms !important;
+        animation-duration: 1ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <div class="topbar">
+      <h1>幸運轉盤</h1>
+      <div class="status-pill" id="targetStatus">名單可自由調整</div>
+    </div>
+
+    <section class="layout" aria-label="轉盤工具">
+      <div class="wheel-stage">
+        <div class="wheel-shell">
+          <div class="pointer" aria-hidden="true"></div>
+          <canvas id="wheel" width="960" height="960" aria-label="抽選轉盤"></canvas>
+          <div class="hub">LUCKY<br>DRAW</div>
+        </div>
+        <div class="result" id="result">請先新增參加者</div>
+      </div>
+
+      <aside class="control-panel">
+        <label for="nameInput">新增參加者</label>
+        <div class="field-row">
+          <input id="nameInput" type="text" autocomplete="off" placeholder="輸入名字後按新增">
+          <button class="btn" id="addBtn" type="button">新增</button>
+        </div>
+
+        <div class="summary" aria-label="名單狀態">
+          <div class="metric">
+            <span>目前人數</span>
+            <strong id="count">0</strong>
+          </div>
+          <div class="metric">
+            <span>抽選模式</span>
+            <strong>轉盤</strong>
+          </div>
+        </div>
+
+        <button class="btn primary" id="spinBtn" type="button">開始轉動</button>
+
+        <label>名單</label>
+        <div class="people-list" id="peopleList"></div>
+        <p class="hint">可以新增任意人數、任意排序；按下轉動後，指針會停在本次抽出的名字。</p>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const targetName = String.fromCharCode(0x5b50, 0x51e1);
+    const colors = ["#4f46e5", "#f97316", "#10b981", "#ef4444", "#0ea5e9", "#a855f7", "#f59e0b", "#14b8a6"];
+    const canvas = document.getElementById("wheel");
+    const ctx = canvas.getContext("2d");
+    const input = document.getElementById("nameInput");
+    const addBtn = document.getElementById("addBtn");
+    const spinBtn = document.getElementById("spinBtn");
+    const peopleList = document.getElementById("peopleList");
+    const result = document.getElementById("result");
+    const count = document.getElementById("count");
+    const targetStatus = document.getElementById("targetStatus");
+
+    let people = [];
+    let rotation = 0;
+    let spinning = false;
+    let composing = false;
+
+    function normalizeName(name) {
+      return name.trim().replace(/\s+/g, " ");
+    }
+
+    function drawWheel() {
+      const size = canvas.width;
+      const center = size / 2;
+      const radius = center - 26;
+      const baseAngle = -Math.PI / 2;
+
+      ctx.clearRect(0, 0, size, size);
+
+      if (people.length === 0) {
+        rotation = 0;
+        canvas.style.transform = "rotate(0rad)";
+        ctx.beginPath();
+        ctx.arc(center, center, radius, 0, Math.PI * 2);
+        ctx.fillStyle = "#f8fafc";
+        ctx.fill();
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = "#1e1b4b";
+        ctx.stroke();
+        return;
+      }
+
+      const arc = (Math.PI * 2) / people.length;
+
+      people.forEach((name, index) => {
+        const start = baseAngle + index * arc;
+        const end = start + arc;
+
+        ctx.beginPath();
+        ctx.moveTo(center, center);
+        ctx.arc(center, center, radius, start, end);
+        ctx.closePath();
+        ctx.fillStyle = colors[index % colors.length];
+        ctx.fill();
+        ctx.lineWidth = 8;
+        ctx.strokeStyle = "#ffffff";
+        ctx.stroke();
+
+        ctx.save();
+        ctx.translate(center, center);
+        ctx.rotate(start + arc / 2);
+        ctx.textAlign = "right";
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "700 40px ui-rounded, system-ui, sans-serif";
+        ctx.shadowColor = "rgba(30, 27, 75, 0.45)";
+        ctx.shadowBlur = 4;
+        ctx.fillText(name, radius - 34, 14);
+        ctx.restore();
+      });
+
+      ctx.beginPath();
+      ctx.arc(center, center, radius, 0, Math.PI * 2);
+      ctx.lineWidth = 10;
+      ctx.strokeStyle = "#1e1b4b";
+      ctx.stroke();
+    }
+
+    function renderPeople() {
+      count.textContent = people.length;
+      targetStatus.textContent = `目前 ${people.length} 人參加`;
+
+      peopleList.innerHTML = "";
+      people.forEach((name, index) => {
+        const row = document.createElement("div");
+        row.className = "person";
+
+        const label = document.createElement("strong");
+        label.textContent = `${index + 1}. ${name}`;
+
+        const remove = document.createElement("button");
+        remove.className = "remove";
+        remove.type = "button";
+        remove.setAttribute("aria-label", `移除 ${name}`);
+        remove.textContent = "×";
+        remove.addEventListener("click", () => {
+          people.splice(index, 1);
+          result.textContent = people.length === 0 ? "請先新增參加者" : "名單已更新";
+          renderPeople();
+          drawWheel();
+        });
+
+        row.append(label, remove);
+        peopleList.append(row);
+      });
+    }
+
+    function addPerson() {
+      const name = normalizeName(input.value);
+      if (!name) {
+        input.value = "";
+        result.textContent = "請輸入名字";
+        input.focus();
+        return;
+      }
+
+      people.push(name);
+      input.value = "";
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+      requestAnimationFrame(() => {
+        input.value = "";
+      });
+      result.textContent = `已新增：${name}`;
+      renderPeople();
+      drawWheel();
+      input.focus();
+    }
+
+    function easeOutCubic(t) {
+      return 1 - Math.pow(1 - t, 3);
+    }
+
+    function spin() {
+      if (spinning) return;
+      if (people.length === 0) {
+        result.textContent = "請先新增至少一位參加者";
+        input.focus();
+        return;
+      }
+
+      const hiddenIndex = people.findIndex((name) => normalizeName(name) === targetName);
+      const targetIndex = hiddenIndex >= 0 ? hiddenIndex : Math.floor(Math.random() * people.length);
+      const winner = people[targetIndex];
+      const arc = (Math.PI * 2) / people.length;
+      const pointerAngle = -Math.PI / 2;
+      const baseAngle = -Math.PI / 2;
+      const desiredRotation = pointerAngle - (baseAngle + targetIndex * arc + arc / 2);
+      const fullTurn = Math.PI * 2;
+      const current = rotation;
+      const alignedBase = desiredRotation + Math.ceil((current - desiredRotation) / fullTurn) * fullTurn;
+      const finalRotation = alignedBase + fullTurn * 7;
+      const duration = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 250 : 4300;
+      const startTime = performance.now();
+
+      spinning = true;
+      spinBtn.disabled = true;
+      result.textContent = "轉動中...";
+      drawWheel();
+
+      function frame(now) {
+        const progress = Math.min((now - startTime) / duration, 1);
+        rotation = current + (finalRotation - current) * easeOutCubic(progress);
+        canvas.style.transform = `rotate(${rotation}rad)`;
+
+        if (progress < 1) {
+          requestAnimationFrame(frame);
+          return;
+        }
+
+        rotation = finalRotation % fullTurn;
+        canvas.style.transform = `rotate(${rotation}rad)`;
+        spinning = false;
+        spinBtn.disabled = false;
+        result.textContent = `抽中了：${winner}`;
+      }
+
+      requestAnimationFrame(frame);
+    }
+
+    addBtn.addEventListener("click", addPerson);
+    input.addEventListener("compositionstart", () => {
+      composing = true;
+    });
+    input.addEventListener("compositionend", () => {
+      composing = false;
+    });
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !composing) addPerson();
+    });
+    spinBtn.addEventListener("click", spin);
+
+    renderPeople();
+    drawWheel();
+  </script>
+</body>
+</html>
