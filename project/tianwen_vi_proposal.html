@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>天問全人資優教育｜初步品牌定位與 VI 規劃提案</title>
+  <style>
+    :root {
+      --navy: #1f3656;
+      --deep-blue: #2f5f86;
+      --gold: #c99a3c;
+      --warm-gold: #e7bd62;
+      --cream: #fbf4e6;
+      --paper: #fffaf0;
+      --science-blue: #3A9BD5;
+      --logic-teal: #3CD1BD;
+      --writing-yellow: #E8BC3E;
+      --math-orange: #EB9350;
+      --green: #567a4a;
+      --teal: var(--logic-teal);
+      --orange: var(--math-orange);
+      --text: #2f2a24;
+      --muted: #746c62;
+      --line: #e2d6c4;
+      --white: #ffffff;
+      --shadow: 0 14px 36px rgba(31, 54, 86, 0.12);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(231, 189, 98, 0.20), transparent 28%),
+        radial-gradient(circle at 90% 15%, rgba(59, 140, 143, 0.16), transparent 26%),
+        linear-gradient(180deg, #fffaf0 0%, #f6efe1 100%);
+      line-height: 1.75;
+    }
+
+    .page {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 48px 0 80px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 56px 56px 50px;
+      border: 1px solid rgba(201, 154, 60, 0.35);
+      border-radius: var(--radius-xl);
+      background:
+        linear-gradient(135deg, rgba(255, 250, 240, 0.96), rgba(255, 255, 255, 0.88)),
+        radial-gradient(circle at 85% 20%, rgba(231, 189, 98, 0.26), transparent 30%);
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      border: 1px dashed rgba(201, 154, 60, 0.42);
+      pointer-events: none;
+    }
+
+    .hero::before {
+      width: 280px;
+      height: 280px;
+      right: -100px;
+      top: -90px;
+    }
+
+    .hero::after {
+      width: 180px;
+      height: 180px;
+      left: -70px;
+      bottom: -60px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 18px;
+      padding: 7px 14px;
+      border: 1px solid rgba(201, 154, 60, 0.45);
+      border-radius: 999px;
+      color: var(--gold);
+      background: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      line-height: 1.32;
+      letter-spacing: 0.04em;
+    }
+
+    h1 {
+      max-width: 850px;
+      color: var(--navy);
+      font-size: clamp(34px, 6vw, 64px);
+      font-weight: 900;
+    }
+
+    .hero-subtitle {
+      max-width: 720px;
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 20px;
+    }
+
+    .hero-statement {
+      margin-top: 34px;
+      padding: 24px 28px;
+      border-left: 6px solid var(--gold);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      background: rgba(255, 255, 255, 0.74);
+      color: var(--navy);
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    section {
+      margin-top: 42px;
+      padding: 38px;
+      border: 1px solid rgba(226, 214, 196, 0.95);
+      border-radius: var(--radius-xl);
+      background: rgba(255, 255, 255, 0.78);
+      box-shadow: 0 8px 24px rgba(31, 54, 86, 0.06);
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+      color: var(--navy);
+      font-size: 30px;
+      font-weight: 900;
+    }
+
+    .section-title::before {
+      content: "";
+      width: 12px;
+      height: 36px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--gold), var(--warm-gold));
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .card {
+      padding: 24px;
+      border: 1px solid rgba(226, 214, 196, 0.9);
+      border-radius: var(--radius-lg);
+      background: var(--paper);
+    }
+
+    .card h3 {
+      margin-bottom: 12px;
+      color: var(--navy);
+      font-size: 21px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .diagnosis-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 22px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .diagnosis-list li {
+      padding: 13px 16px;
+      border-radius: 14px;
+      background: rgba(251, 244, 230, 0.9);
+      border: 1px solid rgba(226, 214, 196, 0.8);
+      color: var(--text);
+    }
+
+    .highlight {
+      padding: 28px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, rgba(31, 54, 86, 0.96), rgba(47, 95, 134, 0.92));
+      color: var(--white);
+    }
+
+    .highlight h3 {
+      margin-bottom: 10px;
+      color: var(--warm-gold);
+      font-size: 24px;
+    }
+
+    .highlight p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 18px;
+    }
+
+    .quote {
+      margin: 24px 0 0;
+      padding: 24px 28px;
+      border-radius: var(--radius-lg);
+      background: rgba(231, 189, 98, 0.16);
+      border: 1px solid rgba(201, 154, 60, 0.28);
+      color: var(--navy);
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      background: #fff;
+      box-shadow: 0 0 0 1px rgba(226, 214, 196, 0.8);
+    }
+
+    th, td {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--navy);
+      background: rgba(251, 244, 230, 0.98);
+      font-weight: 900;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 11px;
+      border-radius: 999px;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .tag.blue { background: var(--science-blue); }
+    .tag.yellow { background: var(--writing-yellow); color: var(--text); }
+    .tag.teal { background: var(--logic-teal); }
+    .tag.orange { background: var(--math-orange); }
+
+    .brand-layers {
+      position: relative;
+      display: grid;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .layer {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 18px;
+      padding: 22px;
+      border-radius: var(--radius-lg);
+      background: rgba(251, 244, 230, 0.95);
+      border: 1px solid rgba(226, 214, 196, 0.9);
+    }
+
+    .layer strong {
+      color: var(--gold);
+      font-size: 18px;
+    }
+
+    .layer h3 {
+      color: var(--navy);
+      font-size: 22px;
+    }
+
+    .layer p {
+      margin: 8px 0 0;
+      color: var(--muted);
+    }
+
+    .vi-board {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .palette {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .swatch {
+      min-height: 148px;
+      padding: 16px;
+      border-radius: var(--radius-lg);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+    }
+
+    .swatch small {
+      display: block;
+      margin-top: 4px;
+      opacity: 0.86;
+      font-weight: 600;
+    }
+
+    .swatch.cream,
+    .swatch.paper {
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .vi-keywords {
+      display: grid;
+      gap: 14px;
+    }
+
+    .keyword {
+      padding: 18px 20px;
+      border-radius: var(--radius-md);
+      background: rgba(251, 244, 230, 0.92);
+      border: 1px solid rgba(226, 214, 196, 0.9);
+    }
+
+    .keyword b {
+      color: var(--navy);
+    }
+
+    .logo-concept {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 26px;
+      align-items: center;
+      padding: 28px;
+      border-radius: var(--radius-xl);
+      background: linear-gradient(135deg, rgba(251,244,230,.95), rgba(255,255,255,.82));
+      border: 1px solid rgba(201, 154, 60, 0.24);
+    }
+
+    .symbol-demo {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin: auto;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(231,189,98,.28), rgba(255,255,255,.8));
+      display: grid;
+      place-items: center;
+      border: 2px solid rgba(201, 154, 60, 0.55);
+    }
+
+    .symbol-demo::before {
+      content: "?";
+      color: var(--navy);
+      font-size: 92px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .symbol-demo::after {
+      content: "✦";
+      position: absolute;
+      top: 24px;
+      right: 42px;
+      color: var(--gold);
+      font-size: 28px;
+    }
+
+    .subbrand-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 22px;
+    }
+
+    .subbrand {
+      padding: 20px;
+      border-radius: var(--radius-lg);
+      background: #fff;
+      border: 1px solid rgba(226,214,196,.9);
+    }
+
+    .subbrand .icon {
+      width: 50px;
+      height: 50px;
+      margin-bottom: 12px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      color: #fff;
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .subbrand h3 {
+      color: var(--navy);
+      font-size: 20px;
+    }
+
+    .subbrand p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .tone-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .speech {
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      background: #fff;
+      border: 1px solid rgba(226,214,196,.9);
+    }
+
+    .speech h3 {
+      margin-bottom: 10px;
+      color: var(--navy);
+    }
+
+    .speech p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .system-flow {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 22px;
+    }
+
+    .flow-item {
+      position: relative;
+      padding: 22px;
+      min-height: 170px;
+      border-radius: var(--radius-lg);
+      background: rgba(251,244,230,.92);
+      border: 1px solid rgba(226,214,196,.9);
+    }
+
+    .flow-item span {
+      display: inline-block;
+      margin-bottom: 12px;
+      color: var(--gold);
+      font-weight: 900;
+      letter-spacing: .08em;
+    }
+
+    .flow-item h3 {
+      margin-bottom: 8px;
+      color: var(--navy);
+    }
+
+    .flow-item p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .final {
+      text-align: center;
+      padding: 54px 42px;
+      background:
+        linear-gradient(135deg, rgba(31,54,86,.98), rgba(86,122,74,.9)),
+        radial-gradient(circle at 50% 0%, rgba(231,189,98,.22), transparent 34%);
+      color: white;
+    }
+
+    .final h2 {
+      color: var(--warm-gold);
+      font-size: clamp(30px, 5vw, 52px);
+    }
+
+    .final p {
+      max-width: 760px;
+      margin: 22px auto 0;
+      color: rgba(255,255,255,.88);
+      font-size: 20px;
+    }
+
+    .note {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* ═══════════════════════════════════════
+       14｜品牌網站視覺示例 — 獨立命名空間
+       ═══════════════════════════════════════ */
+    .ws { font-family: "Noto Sans TC", "PingFang TC", sans-serif; }
+    .ws *, .ws *::before, .ws *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    .ws a { text-decoration: none; color: inherit; }
+
+    /* 子標題列 */
+    .ws-label {
+      font-size: 13px; font-weight: 700; color: #7A9A84;
+      letter-spacing: .06em; margin-bottom: 14px; margin-top: 28px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .ws-label:first-child { margin-top: 0; }
+    .ws-label::before {
+      content: ''; display: block; width: 3px; height: 14px;
+      border-radius: 999px; background: #1D3A28;
+    }
+
+    /* ── 四色入口條 ── */
+    .ws-strip {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border-radius: 16px; overflow: hidden;
+      box-shadow: 0 6px 24px rgba(0,0,0,.11);
+      margin-bottom: 8px;
+    }
+    .ws-bsc {
+      padding: 26px 12px 22px;
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
+      cursor: pointer; text-align: center; transition: filter .15s;
+      border-right: 1px solid rgba(255,255,255,.15);
+    }
+    .ws-bsc:last-child { border-right: none; }
+    .ws-bsc:hover { filter: brightness(1.07); }
+    .ws-bsc-p { background: #3A9BD5; }              /* 燒杯兔 藍 */
+    .ws-bsc-g { background: #3CD1BD; }              /* 酷丁狐 藍綠 */
+    .ws-bsc-o { background: #EB9350; }              /* 麥獅教授 橘 */
+    .ws-bsc-b { background: #E8BC3E; }              /* 龐德鴞 黃 */
+    .ws-bsc-b .nm { color: #4A2E00; }
+    .ws-bsc-b .en { color: rgba(74,46,0,.55); }
+    .ws-bsc .em  { font-size: 36px; line-height: 1; margin-bottom: 4px; }
+    .ws-bsc .en  { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; color: rgba(255,255,255,.65); text-transform: uppercase; }
+    .ws-bsc .nm  { font-size: 14px; font-weight: 900; color: #fff; }
+
+    /* ── 品牌卡片 ── */
+    .ws-brand-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
+      margin-bottom: 8px;
+    }
+    .ws-brand-card {
+      background: #fff; border-radius: 16px; overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,.07);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .ws-brand-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,.1); }
+    .ws-bch {
+      display: flex; align-items: center; gap: 12px; padding: 20px 22px 16px;
+    }
+    .ws-bch-p { background: #3A9BD5; }              /* 燒杯兔 藍 */
+    .ws-bch-g { background: #3CD1BD; }              /* 酷丁狐 藍綠 */
+    .ws-bch-o { background: #EB9350; }              /* 麥獅教授 橘 */
+    .ws-bch-b { background: #E8BC3E; }              /* 龐德鴞 黃 */
+    .ws-bch-b .bc-nm { color: #4A2E00; }
+    .ws-bch-b .bc-en { color: rgba(74,46,0,.55); }
+    .ws-bch .av {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: rgba(255,255,255,.22);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 27px; flex-shrink: 0;
+    }
+    .ws-bch .bc-en { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; color: rgba(255,255,255,.65); text-transform: uppercase; }
+    .ws-bch .bc-nm { font-size: 17px; font-weight: 900; color: #fff; margin-top: 2px; }
+    .ws-bbd { padding: 16px 22px 20px; }
+    .ws-bbd .desc { font-size: 13px; color: #4A6A54; line-height: 1.7; margin-bottom: 13px; }
+    .ws-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .ws-chip {
+      font-size: 11px; font-weight: 500; padding: 3px 10px;
+      border-radius: 10px; border: 1px solid;
+    }
+    .ws-chip-p { background: #D5EBF7; border-color: rgba(58,155,213,.3);   color: #1A6A9A; } /* 兔 藍 */
+    .ws-chip-g { background: #DBF4F1; border-color: rgba(60,209,189,.3);   color: #1A9A8A; } /* 狐 藍綠 */
+    .ws-chip-o { background: #F7EBE2; border-color: rgba(235,147,80,.3);   color: #B55620; } /* 獅 橘 */
+    .ws-chip-b { background: #FBF2D0; border-color: rgba(232,188,62,.4);   color: #7A5800; } /* 鴞 黃 */
+
+    /* ── 課程卡 ── */
+    .ws-course-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 13px;
+    }
+    .ws-course {
+      background: #F6F1E7; border-radius: 14px; overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,.05);
+    }
+    .ws-thumb {
+      height: 88px; display: flex; align-items: center;
+      justify-content: center; font-size: 42px;
+    }
+    .ws-thumb-p { background: #3A9BD5; }             /* 兔 藍 */
+    .ws-thumb-g { background: #3CD1BD; }             /* 狐 藍綠 */
+    .ws-thumb-o { background: #EB9350; }             /* 獅 橘 */
+    .ws-thumb-b { background: #E8BC3E; }             /* 鴞 黃 */
+    .ws-cbody { padding: 12px 13px 14px; }
+    .ws-cdate { font-size: 11px; color: #7A9A84; margin-bottom: 5px; }
+    .ws-cname { font-size: 13px; font-weight: 700; color: #1A2A1E; line-height: 1.5; margin-bottom: 8px; }
+    .ws-cmeta { display: flex; justify-content: space-between; align-items: center; }
+    .ws-cage  { font-size: 11px; color: #4A6A54; }
+    .ws-seat  { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 8px; }
+    .ws-seat-o { background: #DBF4F1; color: #1A9A8A; }
+    .ws-seat-f { background: #F7EBE2; color: #B55620; }
+
+    @media (max-width: 860px) {
+      .page {
+        width: min(100% - 24px, 1120px);
+        padding-top: 24px;
+      }
+
+      .hero,
+      section {
+        padding: 28px;
+      }
+
+      .grid.two,
+      .grid.three,
+      .vi-board,
+      .tone-box,
+      .system-flow,
+      .diagnosis-list,
+      .subbrand-grid,
+      .layer,
+      .logo-concept {
+        grid-template-columns: 1fr;
+      }
+
+      .palette {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+      .page {
+        width: 100%;
+        padding: 0;
+      }
+      .hero,
+      section {
+        box-shadow: none;
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <div class="eyebrow">初步品牌定位與 VI 規劃提案</div>
+      <h1>天問全人資優教育</h1>
+      <p class="hero-subtitle">
+        將既有的課程、角色與森林世界觀，整理成一套可被家長理解、可被孩子記住、也能持續擴充的品牌識別系統。
+      </p>
+      <div class="hero-statement">
+        天問不是四個課程的集合。天問是一座讓孩子練習未來能力的森林學院。
+      </div>
+    </header>
+
+    <section>
+      <h2 class="section-title">01｜品牌現況診斷</h2>
+      <p class="lead">
+        目前素材不是不足，而是元素太多，且層級還沒有被整理清楚。若直接進入 Logo 設計，容易變成每個課程各自發展，後續應用會難以維護。
+      </p>
+      <ul class="diagnosis-list">
+        <li>母品牌、課程品牌、角色與能力標籤混在同一層。</li>
+        <li>魔法、森林、科技、資優、寫作與數學意象尚未整合。</li>
+        <li>家長端能理解的學習價值，需要從「課程內容」轉成「孩子的能力改變」。</li>
+        <li>角色目前偏吉祥物，需要被重新定義為學習引導者。</li>
+        <li>名稱長短與語氣不一致，未來做 Logo 會變得擁擠。</li>
+        <li>高細節插畫適合主視覺，但不適合承擔完整 VI 系統。</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="section-title">02｜品牌重新定位</h2>
+      <div class="grid two">
+        <div class="card">
+          <h3>原本容易被理解成</h3>
+          <p>兒童程式、作文、科學、數學課程品牌。這個說法接近一般補習班，也無法凸顯天問的教育方法。</p>
+        </div>
+        <div class="highlight">
+          <h3>建議重新定義為</h3>
+          <p>一套面向 AI 時代的兒童未來能力教育系統。</p>
+        </div>
+      </div>
+      <div class="quote">
+        品牌一句話定位：天問以故事任務與能力培養為核心，陪孩子在探索、表達、建構與規律中，發展面對未來的思考能力。
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">03｜品牌核心主張</h2>
+      <div class="grid three">
+        <div class="card">
+          <h3>重新定義資優</h3>
+          <p>天問的資優不是單一科目的高分，而是孩子能理解問題，也能創造解法。</p>
+        </div>
+        <div class="card">
+          <h3>從課程變能力</h3>
+          <p>家長真正購買的不是科目，而是孩子面對未來的能力成長。</p>
+        </div>
+        <div class="card">
+          <h3>從角色變引導者</h3>
+          <p>角色不是裝飾，而是孩子進入不同能力訓練的入口。</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">04｜天問四大未來能力</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>能力系統</th>
+            <th>對應課程</th>
+            <th>核心能力</th>
+            <th>孩子的轉變</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag blue">探索系統</span></td>
+            <td>魔法科學</td>
+            <td>探索力</td>
+            <td>從好奇，到觀察與驗證。</td>
+          </tr>
+          <tr>
+            <td><span class="tag yellow">表達系統</span></td>
+            <td>創語思辨</td>
+            <td>表達力</td>
+            <td>從想法，到觀點與說服。</td>
+          </tr>
+          <tr>
+            <td><span class="tag teal">建構系統</span></td>
+            <td>邏思程設</td>
+            <td>建構力</td>
+            <td>從問題，到拆解與解法。</td>
+          </tr>
+          <tr>
+            <td><span class="tag orange">規律系統</span></td>
+            <td>資優數學</td>
+            <td>規律力</td>
+            <td>從線索，到推理與判斷。</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2 class="section-title">05｜品牌架構規劃</h2>
+      <p class="lead">建議將天問拆成三個層級，避免母品牌、世界觀與課程名稱互相搶位置。</p>
+      <div class="brand-layers">
+        <div class="layer">
+          <strong>Level 1</strong>
+          <div>
+            <h3>母品牌｜天問全人資優教育</h3>
+            <p>建立家長信任感、教育理念與整體系統感。視覺需偏專業、穩定、溫和。</p>
+          </div>
+        </div>
+        <div class="layer">
+          <strong>Level 2</strong>
+          <div>
+            <h3>世界觀｜天問森林</h3>
+            <p>作為孩子進入課程的故事入口，也能延伸為網站首頁、招生主視覺與課程地圖。</p>
+          </div>
+        </div>
+        <div class="layer">
+          <strong>Level 3</strong>
+          <div>
+            <h3>子品牌｜四大能力系統</h3>
+            <p>以角色、代表色、能力標籤與圖形符號建立辨識。未來新增課程時可依同一套規則延伸。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">06｜子品牌命名邏輯</h2>
+      <p class="lead">Logo 上不建議放過長的課程名稱。主名稱要短，課程功能放在副標，識別才會乾淨。</p>
+      <table>
+        <thead>
+          <tr>
+            <th>建議主名稱</th>
+            <th>課程副標</th>
+            <th>能力標籤</th>
+            <th>角色定位</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>魔法科學</td>
+            <td>科學探索課程</td>
+            <td>Explore 探索力</td>
+            <td>燒杯兔｜探索引導者</td>
+          </tr>
+          <tr>
+            <td>創語思辨</td>
+            <td>寫作與表達課程</td>
+            <td>Express 表達力</td>
+            <td>龐德鴞｜表達引導者</td>
+          </tr>
+          <tr>
+            <td>邏思程設</td>
+            <td>程式邏輯課程</td>
+            <td>Build 建構力</td>
+            <td>酷丁狐｜建構引導者</td>
+          </tr>
+          <tr>
+            <td>資優數學</td>
+            <td>數學推理課程</td>
+            <td>Reason 規律力</td>
+            <td>麥獅教授｜規律引導者</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2 class="section-title">07｜品牌語氣規劃</h2>
+      <div class="quote">專業的教育者，用孩子聽得懂的方式說話。</div>
+      <div class="tone-box">
+        <div class="speech">
+          <h3>對家長</h3>
+          <p>不製造焦慮，但回應家長對 AI 時代與未來競爭力的擔心。語氣要清楚、可信任、有教育方法。</p>
+        </div>
+        <div class="speech">
+          <h3>對孩子</h3>
+          <p>不講壓力，而是講任務、探索、解謎與成長。讓學習像一場可以被理解的冒險。</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">08｜初步 VI 定位</h2>
+      <div class="vi-board">
+        <div class="highlight">
+          <h3>森林學院 × 知識冒險 × 溫和科技</h3>
+          <p>
+            不建議整體走純魔法風，因為魔法較適合科學課，未必能完整承接程式、寫作與數學。
+            也不建議走冰冷科技風，因為低齡受眾需要親近感。初步 VI 需同時保留故事感、教育系統感與未來感。
+          </p>
+        </div>
+        <div class="vi-keywords">
+          <div class="keyword"><b>森林學院</b>：木質招牌、樹葉、書本、拱門、徽章。</div>
+          <div class="keyword"><b>知識冒險</b>：地圖、路徑、任務卡、星光、探索符號。</div>
+          <div class="keyword"><b>溫和科技</b>：圓角介面、齒輪、工具、節點、簡化程式碼。</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">09｜母品牌 Logo 初步概念</h2>
+      <div class="logo-concept">
+        <div class="symbol-demo" aria-label="問號種子概念示意"></div>
+        <div>
+          <h3>概念：問號種子</h3>
+          <p>
+            以「問」作為學習的起點。問號像種子，種子向上長成樹，也象徵孩子的潛能。
+            搭配星光、書本或拱門，可形成「天問全人資優教育」的母品牌識別。
+          </p>
+          <p class="note">
+            建議母品牌 Logo 以字標為主、圖形為輔。不要直接放四個角色，避免降低專業感與穩定度。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">10｜色彩系統初步規劃</h2>
+      <p class="lead">子品牌色彩調整為：魔法科學用藍色、邏思程設用藍綠色、創語思辨用黃色、資優數學用金橘色。魔法感改由星光、氣泡與燒瓶符號補足，不再依賴紫色。</p>
+      <div class="palette">
+        <div class="swatch" style="background:#1f3656;">深靛藍<small>信任、專業、教育感</small></div>
+        <div class="swatch" style="background:#c99a3c;">溫暖金<small>啟發、星光、資優感</small></div>
+        <div class="swatch cream" style="background:#fbf4e6;">米白<small>親和、紙張、學院感</small></div>
+        <div class="swatch" style="background:#3A9BD5;">探索藍<small>魔法科學｜探索</small></div>
+        <div class="swatch" style="background:#E8BC3E; color:#2f2a24;">金黃色<small>創語思辨｜表達</small></div>
+        <div class="swatch" style="background:#3CD1BD;">藍綠色<small>邏思程設｜建構</small></div>
+        <div class="swatch" style="background:#EB9350;">金橘色<small>資優數學｜規律</small></div>
+        <div class="swatch" style="background:#567a4a;">森林綠<small>森林學院、自然延伸色</small></div>
+        <div class="swatch paper" style="background:#fffaf0;">紙本白<small>背景、教材、留白</small></div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">11｜子品牌識別公式</h2>
+      <p class="lead">子品牌不應各自設計完全不同的 Logo，而是用同一套公式延伸。</p>
+      <div class="quote">角色符號＋子品牌名稱＋能力標籤＋代表色</div>
+      <div class="subbrand-grid">
+        <div class="subbrand">
+          <div class="icon" style="background:#3A9BD5;">✦</div>
+          <h3>魔法科學</h3>
+          <p>燒杯、氣泡、星塵、觀察鏡。</p>
+        </div>
+        <div class="subbrand">
+          <div class="icon" style="background:#E8BC3E; color:#2f2a24;">羽</div>
+          <h3>創語思辨</h3>
+          <p>羽毛、書頁、對話框、墨水。</p>
+        </div>
+        <div class="subbrand">
+          <div class="icon" style="background:#3CD1BD;">⚙</div>
+          <h3>邏思程設</h3>
+          <p>齒輪、節點、路徑、工具。</p>
+        </div>
+        <div class="subbrand">
+          <div class="icon" style="background:#EB9350;">△</div>
+          <h3>資優數學</h3>
+          <p>尺規、幾何、星盤、數列。</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">12｜角色使用層級</h2>
+      <div class="system-flow">
+        <div class="flow-item">
+          <span>A</span>
+          <h3>完整角色插畫</h3>
+          <p>用於主視覺、招生頁、海報與課程封面。重點是故事感與吸引力。</p>
+        </div>
+        <div class="flow-item">
+          <span>B</span>
+          <h3>半身角色</h3>
+          <p>用於社群貼文、教材頁與簡報。重點是表情清楚，容易搭配文字。</p>
+        </div>
+        <div class="flow-item">
+          <span>C</span>
+          <h3>角色頭像 Icon</h3>
+          <p>用於課表、網站選單、能力徽章與貼紙。小尺寸仍需辨識清楚。</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">13｜應用版面系統</h2>
+      <div class="grid two">
+        <div class="card">
+          <h3>對外招生視覺</h3>
+          <p>上方放母品牌 Logo 與核心標語。中段使用天問森林能力地圖。下段整理四大能力系統與家長能理解的學習成果。</p>
+        </div>
+        <div class="card">
+          <h3>子品牌課程頁</h3>
+          <p>固定呈現子品牌名稱、角色導師、能力標籤、課程任務、學習成果，以及家長可觀察的孩子改變。</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">14｜品牌網站視覺示例</h2>
+      <p class="lead">以下為品牌網站的初步版型規劃，呈現四大學院入口條、學院卡片與精選課程的色彩配置與排版邏輯。</p>
+
+      <div class="ws">
+
+        <!-- 四大學院入口條 -->
+        <p class="ws-label">四大學院入口條（置於主視覺正下方）</p>
+        <div class="ws-strip">
+          <a class="ws-bsc ws-bsc-p">
+            <div class="em">🐰</div>
+            <div class="en">Magic Science</div>
+            <div class="nm">燒杯兔</div>
+          </a>
+          <a class="ws-bsc ws-bsc-g">
+            <div class="em">🦊</div>
+            <div class="en">Coding &amp; Logic</div>
+            <div class="nm">酷丁狐</div>
+          </a>
+          <a class="ws-bsc ws-bsc-o">
+            <div class="em">🦁</div>
+            <div class="en">Gifted Math</div>
+            <div class="nm">麥獅教授</div>
+          </a>
+          <a class="ws-bsc ws-bsc-b">
+            <div class="em">🦉</div>
+            <div class="en">Rhetoric &amp; Debate</div>
+            <div class="nm">龐德鴞</div>
+          </a>
+        </div>
+
+        <!-- 四大學院卡片 -->
+        <p class="ws-label">四大學院卡片（彩色標題 + 白色內文區）</p>
+        <div class="ws-brand-grid">
+
+          <div class="ws-brand-card">
+            <div class="ws-bch ws-bch-p">
+              <div class="av">🐰</div>
+              <div>
+                <div class="bc-en">Magic Science</div>
+                <div class="bc-nm">燒杯兔 · 魔法科學</div>
+              </div>
+            </div>
+            <div class="ws-bbd">
+              <p class="desc">把每次實驗都變成魔法表演。燒杯兔帶你認識化學、物理的有趣原理，用「為什麼」打開對世界的好奇心。</p>
+              <div class="ws-chips">
+                <span class="ws-chip ws-chip-p">化學實驗</span>
+                <span class="ws-chip ws-chip-p">物理現象</span>
+                <span class="ws-chip ws-chip-p">科學方法</span>
+                <span class="ws-chip ws-chip-p">自然觀察</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ws-brand-card">
+            <div class="ws-bch ws-bch-g">
+              <div class="av">🦊</div>
+              <div>
+                <div class="bc-en">Coding &amp; Logic</div>
+                <div class="bc-nm">酷丁狐 · 邏思程設</div>
+              </div>
+            </div>
+            <div class="ws-bbd">
+              <p class="desc">程式是解決問題的工具，邏輯是拆解問題的能力。酷丁狐陪你從 Scratch 出發，一路走到真正的程式設計。</p>
+              <div class="ws-chips">
+                <span class="ws-chip ws-chip-g">Scratch</span>
+                <span class="ws-chip ws-chip-g">Python</span>
+                <span class="ws-chip ws-chip-g">運算思維</span>
+                <span class="ws-chip ws-chip-g">AI 應用</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ws-brand-card">
+            <div class="ws-bch ws-bch-o">
+              <div class="av">🦁</div>
+              <div>
+                <div class="bc-en">Gifted Math</div>
+                <div class="bc-nm">麥獅教授 · 資優數學</div>
+              </div>
+            </div>
+            <div class="ws-bbd">
+              <p class="desc">數學不是記公式，是發現規律的遊戲。麥獅教授帶領資優生挑戰更深的數學思維，為競賽和升學建立真正的實力。</p>
+              <div class="ws-chips">
+                <span class="ws-chip ws-chip-o">數學奧林匹亞</span>
+                <span class="ws-chip ws-chip-o">數論入門</span>
+                <span class="ws-chip ws-chip-o">競賽訓練</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ws-brand-card">
+            <div class="ws-bch ws-bch-b">
+              <div class="av">🦉</div>
+              <div>
+                <div class="bc-en">Rhetoric &amp; Debate</div>
+                <div class="bc-nm">龐德鴞 · 創語思辨</div>
+              </div>
+            </div>
+            <div class="ws-bbd">
+              <p class="desc">思考才是最強大的武器。龐德鴞引導孩子學習辯論、批判性思維與公開表達，讓每個想法都能清晰說出來。</p>
+              <div class="ws-chips">
+                <span class="ws-chip ws-chip-b">辯論技巧</span>
+                <span class="ws-chip ws-chip-b">邏輯推理</span>
+                <span class="ws-chip ws-chip-b">批判思維</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 精選課程 -->
+        <p class="ws-label">精選課程卡（色塊縮圖 + 課程資訊）</p>
+        <div class="ws-course-grid">
+
+          <div class="ws-course">
+            <div class="ws-thumb ws-thumb-p">🐰</div>
+            <div class="ws-cbody">
+              <div class="ws-cdate">7月 5日（六）10:00</div>
+              <div class="ws-cname">泡泡不思議——界面張力科學實驗</div>
+              <div class="ws-cmeta">
+                <span class="ws-cage">小一 ～ 小四</span>
+                <span class="ws-seat ws-seat-o">招生中</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ws-course">
+            <div class="ws-thumb ws-thumb-g">🦊</div>
+            <div class="ws-cbody">
+              <div class="ws-cdate">7月 12日（六）14:00</div>
+              <div class="ws-cname">Scratch × AI 小創作暑期工作坊</div>
+              <div class="ws-cmeta">
+                <span class="ws-cage">小三 ～ 小六</span>
+                <span class="ws-seat ws-seat-f">剩 3 位</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ws-course">
+            <div class="ws-thumb ws-thumb-o">🦁</div>
+            <div class="ws-cbody">
+              <div class="ws-cdate">7月 每週二 18:30</div>
+              <div class="ws-cname">資優數學進階班：數論入門</div>
+              <div class="ws-cmeta">
+                <span class="ws-cage">國小 ～ 國中</span>
+                <span class="ws-seat ws-seat-o">招生中</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ws-course">
+            <div class="ws-thumb ws-thumb-b">🦉</div>
+            <div class="ws-cbody">
+              <div class="ws-cdate">7月 19日（六）10:00</div>
+              <div class="ws-cname">辯論入門親子工作坊</div>
+              <div class="ws-cmeta">
+                <span class="ws-cage">小三 ～ 國一</span>
+                <span class="ws-seat ws-seat-f">剩 5 位</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="final">
+      <h2>以提問為起點，以能力為路徑。</h2>
+      <p>
+        讓孩子在探索、表達、建構與規律中，長出面對未來的思考力。
+      </p>
+    </section>
+  </main>
+</body>
+</html>
