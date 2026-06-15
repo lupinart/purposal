@@ -145,10 +145,14 @@
 
   <script>
     const targetStorageKey = "zifan-wheel-target-text";
+    const targetChannelName = "zifan-wheel-target-channel";
+    const targetChannel = "BroadcastChannel" in window ? new BroadcastChannel(targetChannelName) : null;
     const input = document.getElementById("targetInput");
     const saveBtn = document.getElementById("saveBtn");
     const clearBtn = document.getElementById("clearBtn");
     const status = document.getElementById("status");
+    let composing = false;
+    let liveSaveTimer = 0;
 
     function normalizeText(text) {
       return text.trim().replace(/\s+/g, " ");
@@ -160,19 +164,47 @@
       status.textContent = target ? `目前指定：${target}` : "目前未指定，轉盤會正常隨機抽選";
     }
 
-    saveBtn.addEventListener("click", () => {
-      const target = normalizeText(input.value);
+    function setTarget(target) {
+      target = normalizeText(target);
       localStorage.setItem(targetStorageKey, target);
-      renderStatus();
+      status.textContent = target ? `目前指定：${target}` : "目前未指定，轉盤會正常隨機抽選";
+      if (targetChannel) {
+        targetChannel.postMessage({
+          type: "target",
+          target,
+          updatedAt: Date.now()
+        });
+      }
+    }
+
+    function scheduleLiveSave() {
+      window.clearTimeout(liveSaveTimer);
+      liveSaveTimer = window.setTimeout(() => {
+        setTarget(input.value);
+      }, 120);
+    }
+
+    saveBtn.addEventListener("click", () => {
+      setTarget(input.value);
     });
 
     clearBtn.addEventListener("click", () => {
-      localStorage.setItem(targetStorageKey, "");
-      renderStatus();
+      input.value = "";
+      setTarget("");
     });
 
     input.addEventListener("keydown", (event) => {
       if (event.key === "Enter") saveBtn.click();
+    });
+    input.addEventListener("compositionstart", () => {
+      composing = true;
+    });
+    input.addEventListener("compositionend", () => {
+      composing = false;
+      setTarget(input.value);
+    });
+    input.addEventListener("input", () => {
+      if (!composing) scheduleLiveSave();
     });
 
     renderStatus();
