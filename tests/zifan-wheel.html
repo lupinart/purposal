@@ -424,6 +424,8 @@
 
   <script>
     const targetName = String.fromCharCode(0x5b50, 0x51e1);
+    const teacherName = String.fromCharCode(0x8001, 0x5e2b);
+    const priorityNames = [targetName, teacherName];
     const colors = ["#4f46e5", "#f97316", "#10b981", "#ef4444", "#0ea5e9", "#a855f7", "#f59e0b", "#14b8a6"];
     const canvas = document.getElementById("wheel");
     const ctx = canvas.getContext("2d");
@@ -442,6 +444,11 @@
 
     function normalizeName(name) {
       return name.trim().replace(/\s+/g, " ");
+    }
+
+    function hasTargetName(name) {
+      const compactName = normalizeName(name).replace(/\s/g, "");
+      return priorityNames.some((priorityName) => compactName.includes(priorityName));
     }
 
     function drawWheel() {
@@ -507,7 +514,7 @@
       peopleList.innerHTML = "";
       people.forEach((name, index) => {
         const row = document.createElement("div");
-        row.className = "person";
+        row.className = hasTargetName(name) ? "person target" : "person";
 
         const label = document.createElement("strong");
         label.textContent = `${index + 1}. ${name}`;
@@ -562,7 +569,7 @@
         return;
       }
 
-      const hiddenIndex = people.findIndex((name) => normalizeName(name) === targetName);
+      const hiddenIndex = people.findIndex(hasTargetName);
       const targetIndex = hiddenIndex >= 0 ? hiddenIndex : Math.floor(Math.random() * people.length);
       const winner = people[targetIndex];
       const arc = (Math.PI * 2) / people.length;
