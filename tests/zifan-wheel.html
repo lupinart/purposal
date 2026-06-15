@@ -330,31 +330,6 @@
       font-size: 14px;
     }
 
-    .admin-panel {
-      display: none;
-      margin-top: 16px;
-      border-top: 2px dashed var(--line);
-      padding-top: 16px;
-    }
-
-    body.admin-visible .admin-panel {
-      display: block;
-    }
-
-    .admin-actions {
-      display: grid;
-      grid-template-columns: 1fr auto auto;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .admin-note {
-      margin: 8px 0 0;
-      color: var(--good);
-      font-size: 13px;
-      font-weight: 800;
-    }
-
     @media (max-width: 860px) {
       .layout {
         grid-template-columns: 1fr;
@@ -372,8 +347,7 @@
       }
 
       .topbar,
-      .field-row,
-      .admin-actions {
+      .field-row {
         grid-template-columns: 1fr;
         display: grid;
       }
@@ -444,22 +418,11 @@
         <label>名單</label>
         <div class="people-list" id="peopleList"></div>
         <p class="hint">可以新增任意人數、任意排序；按下轉動後，指針會停在本次抽出的名字。</p>
-
-        <div class="admin-panel" id="adminPanel">
-          <label for="targetInput">指定中獎文字</label>
-          <div class="admin-actions">
-            <input id="targetInput" type="text" autocomplete="off" placeholder="例如：第五組">
-            <button class="btn" id="saveTargetBtn" type="button">套用</button>
-            <button class="btn" id="clearTargetBtn" type="button">清除</button>
-          </div>
-          <p class="admin-note" id="adminNote"></p>
-        </div>
       </aside>
     </section>
   </main>
 
   <script>
-    const defaultTargetText = String.fromCharCode(0x7b2c, 0x4e94, 0x7d44);
     const targetStorageKey = "zifan-wheel-target-text";
     const colors = ["#4f46e5", "#f97316", "#10b981", "#ef4444", "#0ea5e9", "#a855f7", "#f59e0b", "#14b8a6"];
     const canvas = document.getElementById("wheel");
@@ -471,17 +434,12 @@
     const result = document.getElementById("result");
     const count = document.getElementById("count");
     const targetStatus = document.getElementById("targetStatus");
-    const targetInput = document.getElementById("targetInput");
-    const saveTargetBtn = document.getElementById("saveTargetBtn");
-    const clearTargetBtn = document.getElementById("clearTargetBtn");
-    const adminNote = document.getElementById("adminNote");
 
     let people = [];
     let rotation = 0;
     let spinning = false;
     let composing = false;
-    let adminVisible = false;
-    let forcedTargetText = defaultTargetText;
+    let forcedTargetText = "";
 
     function normalizeName(name) {
       return name.trim().replace(/\s+/g, " ");
@@ -497,29 +455,8 @@
       return compactText(name).includes(targetText);
     }
 
-    function updateAdminNote() {
-      adminNote.textContent = forcedTargetText ? `目前指定：${forcedTargetText}` : "目前未指定，會正常隨機抽選";
-      targetInput.value = forcedTargetText;
-    }
-
-    function setAdminVisible(visible) {
-      adminVisible = visible;
-      document.body.classList.toggle("admin-visible", adminVisible);
-      renderPeople();
-    }
-
     function loadTargetSettings() {
-      const params = new URLSearchParams(window.location.search);
-      const urlTarget = params.get("target");
-      if (urlTarget !== null) {
-        localStorage.setItem(targetStorageKey, normalizeName(urlTarget));
-      }
-
-      const storedTarget = localStorage.getItem(targetStorageKey);
-      forcedTargetText = storedTarget === null ? defaultTargetText : normalizeName(storedTarget);
-      adminVisible = params.get("admin") === "1" || window.location.hash === "#admin";
-      updateAdminNote();
-      setAdminVisible(adminVisible);
+      forcedTargetText = normalizeName(localStorage.getItem(targetStorageKey) || "");
     }
 
     function drawWheel() {
@@ -585,7 +522,7 @@
       peopleList.innerHTML = "";
       people.forEach((name, index) => {
         const row = document.createElement("div");
-        row.className = adminVisible && hasTargetName(name) ? "person target" : "person";
+        row.className = "person";
 
         const label = document.createElement("strong");
         label.textContent = `${index + 1}. ${name}`;
@@ -640,6 +577,7 @@
         return;
       }
 
+      loadTargetSettings();
       const hiddenIndex = people.findIndex(hasTargetName);
       const targetIndex = hiddenIndex >= 0 ? hiddenIndex : Math.floor(Math.random() * people.length);
       const winner = people[targetIndex];
@@ -690,25 +628,8 @@
       if (event.key === "Enter" && !composing) addPerson();
     });
     spinBtn.addEventListener("click", spin);
-    saveTargetBtn.addEventListener("click", () => {
-      forcedTargetText = normalizeName(targetInput.value);
-      localStorage.setItem(targetStorageKey, forcedTargetText);
-      updateAdminNote();
-      renderPeople();
-    });
-    clearTargetBtn.addEventListener("click", () => {
-      forcedTargetText = "";
-      localStorage.setItem(targetStorageKey, "");
-      updateAdminNote();
-      renderPeople();
-    });
-    targetInput.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") saveTargetBtn.click();
-    });
-    window.addEventListener("keydown", (event) => {
-      if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === "x") {
-        setAdminVisible(!adminVisible);
-      }
+    window.addEventListener("storage", (event) => {
+      if (event.key === targetStorageKey) loadTargetSettings();
     });
 
     loadTargetSettings();
