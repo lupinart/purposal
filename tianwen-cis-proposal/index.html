@@ -105,6 +105,16 @@ strong{color:var(--blue);font-weight:700}
 #dots button.on{background:var(--blue);width:26px;border-radius:5px}
 .on-dark #dots button{background:rgba(255,255,255,.28)}
 .on-dark #dots button.on{background:var(--teal)}
+#dots button{width:12px;height:12px}
+#dots button.on{width:30px}
+.navbtn{position:fixed;top:50%;transform:translateY(-50%);z-index:80;width:54px;height:54px;border-radius:50%;border:none;
+  background:rgba(20,32,94,.30);color:#fff;font-size:30px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);transition:opacity .2s,background .2s;padding-bottom:4px}
+.navbtn.prev{left:18px}.navbtn.next{right:18px}
+.navbtn:active{background:rgba(20,32,94,.55)}
+.on-dark .navbtn{background:rgba(255,255,255,.18)}
+.on-dark .navbtn:active{background:rgba(255,255,255,.34)}
+@media(hover:hover) and (min-width:900px){.navbtn{opacity:.32}.navbtn:hover{opacity:1;background:rgba(20,32,94,.5)}.on-dark .navbtn:hover{background:rgba(255,255,255,.3)}}
 
 /* helpers */
 .row{display:flex}.col{display:flex;flex-direction:column}
@@ -512,6 +522,8 @@ strong{color:var(--blue);font-weight:700}
 
 </div>
 <div id="dots"></div>
+<button class="navbtn prev" aria-label="上一頁">‹</button>
+<button class="navbtn next" aria-label="下一頁">›</button>
 
 <style>
 /* component styles */
@@ -586,7 +598,14 @@ addEventListener('keydown',e=>{
   else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1);}
   else if(e.key==='Home')go(0); else if(e.key==='End')go(slides.length-1);
 });
-addEventListener('click',e=>{if(e.target.closest('#dots')||e.target.closest('button'))return;});
+document.querySelector('.navbtn.prev').addEventListener('click',()=>go(cur-1));
+document.querySelector('.navbtn.next').addEventListener('click',()=>go(cur+1));
+let _tx=0,_ty=0,_tt=0;
+addEventListener('touchstart',e=>{const t=e.changedTouches[0];_tx=t.clientX;_ty=t.clientY;_tt=Date.now();},{passive:true});
+addEventListener('touchend',e=>{
+  const t=e.changedTouches[0],dx=t.clientX-_tx,dy=t.clientY-_ty;
+  if(Date.now()-_tt<700 && Math.abs(dx)>48 && Math.abs(dx)>Math.abs(dy)*1.4){go(cur+(dx<0?1:-1));}
+},{passive:true});
 
 function scale(){
   const st=document.getElementById('stage');
